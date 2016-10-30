@@ -19,7 +19,8 @@
 		"socket.io": "",
 		"@types/socket.io": "",
 		"@types/mongodb": "",
-		"mongodb": "" 
+		"mongodb": "",
+		"body-parser": ""
 	},
 	"engines": {
 		"node": "6.9.1"
