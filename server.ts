@@ -1,16 +1,45 @@
 /// <reference types="node" />
 
 import * as express from 'express';
+import * as tss from 'typescript-simple';
+import * as url from 'url';
+import * as path from 'path';
+import * as fs from 'fs';
 const expressNunjucks = require('express-nunjucks');
 const expressLess = require('express-less');
 
 const app = express();
 app.set('views', __dirname + '/templates');
-app.use(express.static('public'));
+//app.use(express.static('public'));
 app.use('/style', expressLess(__dirname + '/less'));
+app.use('/js', function(req, res, next) {
+  if (req.method != 'GET' && req.method != 'HEAD') {
+      return next();
+  }
+
+  var pathname = url.parse(req.url).pathname;
+
+  if (path.extname(pathname) != '.js') {
+      return next();
+  }
+
+  var src = path.join(
+      __dirname,
+      'typescript',
+      path.dirname(pathname),
+      path.basename(pathname, '.js') + '.ts'
+  );
+
+  fs.readFile(src, function(err, data) {
+    if (err) return next();
+
+    res.set('Content-Type', 'text/javascript');
+    res.send(tss(data.toString('utf8')));
+  });
+});
 expressNunjucks(app, {
     watch: true,
-    noCache: true
+    noCache: true,
 });
 
 const template = [
@@ -53,7 +82,6 @@ for (let i = 1; i < rows - 1; i++) {
     if (s == '.' || s == undefined) {
       puzzle[i][j].type = types.black;
     } else {
-      puzzle[i][j].user_solution = ' ';
       puzzle[i][j].type = types.empty;
     }
   }
