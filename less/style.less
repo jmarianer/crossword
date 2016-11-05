@@ -1,0 +1,24 @@
+h1 {
+  color: blue;
+  
+  span {
+    color: green;
+  }
+}
+
+.crossword {
+  border-collapse: collapse;
+  td {
+    border: 1px solid black;
+    width: 30px;
+    height: 30px;
+    
+    &.black {
+      background-color: black;
+    }
+    
+    &.outside {
+      border: none;
+    }
+  }
+}
