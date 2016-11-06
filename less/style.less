@@ -1,17 +1,11 @@
-h1 {
-  color: blue;
-  
-  span {
-    color: green;
-  }
-}
-
 .crossword {
   border-collapse: collapse;
   td {
     border: 1px solid black;
     width: 30px;
     height: 30px;
+    position: relative;
+    text-align: center;
     
     &.black {
       background-color: black;
@@ -19,6 +13,13 @@ h1 {
     
     &.outside {
       border: none;
+    }
+
+    .number {
+      position: absolute;
+      left: 1px;
+      top: 1px;
+      font-size: smaller;
     }
   }
 }

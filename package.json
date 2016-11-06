@@ -1,26 +1,30 @@
 {
-	"name": "my-hyperdev-app",
-		"version": "0.0.1",
-		"description": "What am I about?",
-		"main": "server.js",
-		"scripts": {
-			"start": "node server.js"
-		},
-		"dependencies": {
-			"express": "^4.12.4",
-			"express-nunjucks": "",
-			"nunjucks": "",
-			"express-less": ""
-		},
-		"engines": {
-			"node": "6.9.1"
-		},
-		"repository": {
-			"type": "git",
-			"url": "https://hyperdev.com/#!/project/welcome-project"
-		},
-		"keywords": [
-			"hyperdev"
-			],
-		"license": ""
+	"name": "crossword",
+	"version": "0.0.1",
+	"description": "What am I about?",
+	"main": "server.ts",
+	"scripts": {
+		"start": "ts-node server.ts"
+	},
+	"dependencies": {
+		"express": "^4.12.4",
+		"express-nunjucks": "",
+		"nunjucks": "",
+		"express-less": "",
+		"ts-node": "",
+		"typescript": "rc",
+		"@types/node": "",
+		"@types/express": ""
+	},
+	"engines": {
+		"node": "6.9.1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://hyperdev.com/#!/project/welcome-project"
+	},
+	"keywords": [
+		"hyperdev"
+	],
+	"license": ""
 }
