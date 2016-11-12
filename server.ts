@@ -49,28 +49,32 @@ expressNunjucks(app, {
 MongoClient.connect(process.env.MONGODB, function(err, db) {
   if (err) throw err;
 
-  db.collection('crosswords').find({id: 1}).toArray(function(err, data) {
+  db.collection('crosswords').find().toArray(function(err, data) {
     if (err) throw err;
 
-    let puzzle = data[0].puzzle;
+    let puzzles : {[id: number]: cell[][]} = {};
+    for (let i of data) {
+      puzzles[i._id] = i.puzzle;
+    }
 
-    app.get("/", function (request, response) {
+    app.get("/*", function (request, response) {
+      var puzzid = path.basename(request.url);
       response.render('index', {
-        puzzle: puzzle,
+        puzzle: puzzles[puzzid],
         cellType: cellType,
       });
     });
     
     var listener = app.listen(process.env.PORT, function () {
-      console.log('Your app is listening on port ' + listener.address().port);
+      console.log('Your app is up');
     });
     
     var io_listener = io(listener)
-    io_listener.on('connection', function(socket){
-      console.log('a user connected');
+    io_listener.on('connection', function(socket) {
+      var puzzid = path.basename(socket.client.request.headers.referer);
       socket.on('solution', function(msg) {
-        puzzle[msg.row][msg.col].user_solution = msg.solution;
-        db.collection('crosswords').update({id: 1}, {$set: {puzzle: puzzle}})
+        puzzles[puzzid][msg.row][msg.col].user_solution = msg.solution;
+        db.collection('crosswords').update({id: puzzid}, {$set: {puzzle: puzzles[puzzid]}})
         io_listener.emit('solution', msg);
       });
     });
