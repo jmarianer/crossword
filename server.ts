@@ -1,5 +1,7 @@
 /// <reference types="node" />
 
+import { cell, cellType } from './types'
+import { MongoClient } from 'mongodb'
 import * as express from 'express';
 import * as tss from 'typescript-simple';
 import * as url from 'url';
@@ -43,111 +45,34 @@ expressNunjucks(app, {
     noCache: true,
 });
 
-const template = [
-  '..xxxxxxxxxx',
-  'x.x.x.x.x.x',
-  'xxxxxxx.xxxxx',
-  'x.x.x.x.x.x.x',
-  'xxxx.xxxxxxxx',
-];
 
-const rows = template.length + 2;
-const cols = Math.max(...template.map(f=>f.length)) + 2;
+MongoClient.connect(process.env.MONGODB, function(err, db) {
+  if (err) throw err;
 
-enum types {
-  black,
-  empty,
-  outside,
-}
-class cell {
-  type : types;
-  number : number;
-  user_solution : string = "";
-  row : number;
-  col : number;
-  
-  isFillable() { return this.type == types.empty; }
-}
-var puzzle : cell[][];
-puzzle = [];
+  db.collection('crosswords').find({id: 1}).toArray(function(err, data) {
+    if (err) throw err;
 
-for (let i = 0; i < rows; i++) {
-  let row : cell[] = [];
-  for (let j = 0; j < cols; j++) {
-    row.push(new cell());
-  }
-  puzzle.push(row);
-}
+    let puzzle = data[0].puzzle;
 
-for (let i = 1; i < rows - 1; i++) {
-  for (let j = 1; j < cols - 1; j++) {
-    var s = template[i-1][j-1];
-    puzzle[i][j].row = i;
-    puzzle[i][j].col = j;
-    if (s == '.' || s == undefined) {
-      puzzle[i][j].type = types.black;
-    } else {
-      puzzle[i][j].type = types.empty;
-    }
-  }
-}
-for (let i = 0; i < rows; i++) {
-  puzzle[i][0].type = types.outside;
-  puzzle[i][cols-1].type = types.outside;
-}
-for (let j = 0; j < cols; j++) {
-  puzzle[0][j].type = types.outside;
-  puzzle[rows-1][j].type = types.outside;
-}
-
-for (;;) {
-  let changed = false;
-  for (let i = 1; i < rows - 1; i++) {
-    for (let j = 1; j < cols - 1; j++) {
-      if (puzzle[i][j].type == types.black && (
-          puzzle[i][j-1].type == types.outside ||
-          puzzle[i][j+1].type == types.outside ||
-          puzzle[i-1][j].type == types.outside ||
-          puzzle[i+1][j].type == types.outside)) {
-          puzzle[i][j].type = types.outside;
-        changed = true;
-      }
-    }
-  }
-  if (!changed) { 
-    break;
-  }
-}
-
-var number = 1;
-for (let i = 1; i < rows - 1; i++) {
-  for (let j = 1; j < cols - 1; j++) {
-    if (puzzle[i][j].isFillable() && (
-        ((!puzzle[i][j-1].isFillable()) &&
-         (puzzle[i][j+1].isFillable())) ||
-        ((!puzzle[i-1][j].isFillable()) &&
-         (puzzle[i+1][j].isFillable())))) {
-      puzzle[i][j].number = number++;
-    }
-  }
-}
-
-app.get("/", function (request, response) {
-  response.render('index', {
-    puzzle: puzzle,
-    types: types,
-  });
-});
-
-var listener = app.listen(process.env.PORT, function () {
-  console.log('Your app is listening on port ' + listener.address().port);
-});
-
-var l1 = io(listener)
-l1.on('connection', function(socket){
-  console.log('a user connected');
-  socket.on('solution', function(msg) {
-    puzzle[msg.row][msg.col].user_solution = msg.solution;
-    l1.emit('solution', msg);
+    app.get("/", function (request, response) {
+      response.render('index', {
+        puzzle: puzzle,
+        cellType: cellType,
+      });
+    });
+    
+    var listener = app.listen(process.env.PORT, function () {
+      console.log('Your app is listening on port ' + listener.address().port);
+    });
+    
+    var io_listener = io(listener)
+    io_listener.on('connection', function(socket){
+      console.log('a user connected');
+      socket.on('solution', function(msg) {
+        puzzle[msg.row][msg.col].user_solution = msg.solution;
+        db.collection('crosswords').update({id: 1}, {$set: {puzzle: puzzle}})
+        io_listener.emit('solution', msg);
+      });
+    });
   });
 });

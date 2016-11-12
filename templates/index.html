@@ -7,20 +7,20 @@
   <table>
     {% for row in puzzle %}
       <tr>
-      {% for cell in row %}
-        {% if cell.type == types.black %}
-        <td class="black"></td>
-        {% elif cell.type == types.outside %}
-        <td class="outside"></td>
-        {% else %}
-        <td class="empty" data-row="{{cell.row}}" data-col="{{cell.col}}">
-          {% if cell.number != undefined %}
-            <div class="number">{{ cell.number }}</div>
+        {% for cell in row %}
+          {% if cell.type == cellType.black %}
+            <td class="black"></td>
+          {% elif cell.type == cellType.outside %}
+            <td class="outside"></td>
+          {% else %}
+            <td class="empty" data-row="{{cell.row}}" data-col="{{cell.col}}">
+              {% if cell.number != undefined %}
+                <div class="number">{{ cell.number }}</div>
+              {% endif %}
+              <span class="solution">{{ cell.user_solution }}</span>
+            </td>
           {% endif %}
-          <span class="solution">{{ cell.user_solution }}</span>
-        </td>
-        {% endif %}
-      {% endfor %}
+        {% endfor %}
       </tr>
     {% endfor %}
   </table>

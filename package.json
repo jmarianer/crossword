@@ -1,8 +1,7 @@
 {
 	"name": "crossword",
 	"version": "0.0.1",
-	"description": "What am I about?",
-	"main": "server.ts",
+	"description": "A collaborative crossword-filling app",
 	"scripts": {
 		"start": "ts-node server.ts"
 	},
@@ -18,7 +17,9 @@
 		"@types/express-less": "",
 		"typescript-simple": "",
 		"socket.io": "",
-		"@types/socket.io": ""
+		"@types/socket.io": "",
+		"@types/mongodb": "",
+		"mongodb": "" 
 	},
 	"engines": {
 		"node": "6.9.1"
