@@ -10,10 +10,10 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as expressLess from 'express-less';
 import * as io from 'socket.io';
+import * as nunjucks from 'nunjucks'; 
 //XXX figure out why these can't be imported
 //import * as bodyParser from 'body-parser';
 const bodyParser = require('body-parser');
-const expressNunjucks = require('express-nunjucks');
 const browserify = require('browserify');
 const tsify = require('tsify');
 
@@ -34,9 +34,9 @@ browserify('ui.ts')
     });
   });
 
-expressNunjucks(app, {
-    watch: true,
-    noCache: true,
+nunjucks.configure('templates', { 
+    autoescape: true, 
+    express: app, 
 });
 
 MongoClient.connect(process.env.MONGODB, function(err, db) {
@@ -52,14 +52,14 @@ MongoClient.connect(process.env.MONGODB, function(err, db) {
 
     app.get("/puzzle/*", function (request, response) {
       var puzzid = path.basename(request.url);
-      response.render('puzzle', {
+      response.render('puzzle.html', {
         puzzle: puzzles[puzzid],
         cellType: cellType,
       });
     });
     
     app.get("/create", function (request, response) {
-      response.render('create');
+      response.render('create.html');
     });
     
     app.post('/created', function (request, response) {

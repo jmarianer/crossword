@@ -12,6 +12,7 @@
 		"@types/jquery": "", 
 		"@types/mongodb": "", 
 		"@types/node": "",
+		"@types/nunjucks": "",
 		"@types/socket.io": "",
 		"@types/socket.io-client": "", 
 		"body-parser": "",
