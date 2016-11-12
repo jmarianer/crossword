@@ -2,7 +2,7 @@
 
 import { cell, cellType } from './types'
 import { createPuzzle } from './create-puzzle'
-import { MongoClient } from 'mongodb'
+import { MongoClient, ObjectID } from 'mongodb'
 import * as express from 'express';
 import * as tss from 'typescript-simple';
 import * as url from 'url';
@@ -85,7 +85,7 @@ MongoClient.connect(process.env.MONGODB, function(err, db) {
       var puzzid = path.basename(socket.client.request.headers.referer);
       socket.on('solution', function(msg) {
         puzzles[puzzid][msg.row][msg.col].user_solution = msg.solution;
-        db.collection('crosswords').update({id: puzzid}, {$set: {puzzle: puzzles[puzzid]}})
+        db.collection('crosswords').update({_id: new ObjectID(puzzid)}, {$set: {puzzle: puzzles[puzzid]}})
         io_listener.emit('solution', msg);
       });
     });
