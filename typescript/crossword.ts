@@ -1,5 +1,6 @@
 /// <reference types="jquery" />
-declare var $;
+declare var $, io;
+var socket = io();
 
 function activate(elt) {
   $('.active').removeClass('active');
@@ -27,7 +28,14 @@ function move(row, col, drow, dcol) {
 }
 
 function sendSolution(data, solution) {
-  // Stub.
+  if (data != null) {
+    var msg = {
+      row: data.row,
+      col: data.col,
+      solution: solution,
+    };
+    socket.emit('solution', msg);
+  }
 }
 
 $(function() {
@@ -54,4 +62,8 @@ $(function() {
       sendSolution(data, ' ');
     }
   });
+});
+
+socket.on('solution', function (msg) {
+  find(msg.row, msg.col).find('.solution').html(msg.solution);
 });

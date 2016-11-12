@@ -16,7 +16,9 @@
 		"@types/node": "",
 		"@types/express": "",
 		"@types/express-less": "",
-		"typescript-simple": ""
+		"typescript-simple": "",
+		"socket.io": "",
+		"@types/socket.io": ""
 	},
 	"engines": {
 		"node": "6.9.1"

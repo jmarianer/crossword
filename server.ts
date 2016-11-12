@@ -6,6 +6,7 @@ import * as url from 'url';
 import * as path from 'path';
 import * as fs from 'fs';
 import * as expressLess from 'express-less';
+import * as io from 'socket.io';
 const expressNunjucks = require('express-nunjucks');
 
 const app = express();
@@ -140,4 +141,13 @@ app.get("/", function (request, response) {
 
 var listener = app.listen(process.env.PORT, function () {
   console.log('Your app is listening on port ' + listener.address().port);
+});
+
+var l1 = io(listener)
+l1.on('connection', function(socket){
+  console.log('a user connected');
+  socket.on('solution', function(msg) {
+    puzzle[msg.row][msg.col].user_solution = msg.solution;
+    l1.emit('solution', msg);
+  });
 });
