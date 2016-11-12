@@ -1,17 +1,18 @@
 import * as $ from 'jquery';
 import * as io from 'socket.io-client';
+import { message } from './types';
 var socket = io();
 
-function activate(elt) {
+function activate(elt : JQuery) {
   $('.active').removeClass('active');
   $(elt).addClass('active');
 }
 
-function find(row, col) {
+function find(row : number, col : number) {
   return $('[data-row="' + row + '"][data-col="' + col + '"]');
 }
 
-function move(row, col, drow, dcol) {
+function move(row : number, col : number, drow : number, dcol : number) {
   for (;;) {
     row += drow;
     col += dcol;
@@ -27,9 +28,9 @@ function move(row, col, drow, dcol) {
   }
 }
 
-function sendSolution(data, solution) {
+function sendSolution(data : any, solution : string) {  // XXX I don't think this should be "any"
   if (data != null) {
-    var msg = {
+    var msg : message = {
       row: data.row,
       col: data.col,
       solution: solution,
@@ -64,6 +65,6 @@ $(function() {
   });
 });
 
-socket.on('solution', function (msg) {
+socket.on('solution', function (msg : message) {
   find(msg.row, msg.col).find('.solution').html(msg.solution);
 });

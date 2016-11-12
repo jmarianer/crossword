@@ -14,3 +14,9 @@ export class cell {
   
   isFillable() { return this.type == cellType.empty; }
 }
+
+export class message {
+  row : number;
+  col : number;
+  solution : string;
+}

@@ -1,6 +1,6 @@
 /// <reference types="node" />
 
-import { cell, cellType } from './types'
+import { cell, cellType, message } from './types'
 import { createPuzzle } from './create-puzzle'
 import { MongoClient, ObjectID } from 'mongodb'
 import * as express from 'express';
@@ -22,8 +22,8 @@ app.set('views', __dirname + '/templates');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/style', expressLess(__dirname + '/less'));
 browserify('ui.ts')
-  .plugin(tsify) // XXX , { noImplicitAny: true })
-  .bundle(function(err, buf) {
+  .plugin(tsify, { noImplicitAny: true })
+  .bundle(function(err : any, buf : Buffer) {
     if (err) {
       console.log(err);
     }
@@ -45,7 +45,7 @@ MongoClient.connect(process.env.MONGODB, function(err, db) {
   db.collection('crosswords').find().toArray(function(err, data) {
     if (err) throw err;
 
-    let puzzles : {[id: number]: cell[][]} = {};
+    let puzzles : {[id: string]: cell[][]} = {};
     for (let i of data) {
       puzzles[i._id] = i.puzzle;
     }
@@ -83,7 +83,7 @@ MongoClient.connect(process.env.MONGODB, function(err, db) {
     var io_listener = io(listener)
     io_listener.on('connection', function(socket) {
       var puzzid = path.basename(socket.client.request.headers.referer);
-      socket.on('solution', function(msg) {
+      socket.on('solution', function(msg : message) {
         puzzles[puzzid][msg.row][msg.col].user_solution = msg.solution;
         db.collection('crosswords').update({_id: new ObjectID(puzzid)}, {$set: {puzzle: puzzles[puzzid]}})
         io_listener.emit('solution', msg);
