@@ -1,5 +1,11 @@
 .crossword {
-  border-collapse: collapse;
+  display: flex;
+  justify-content: center;
+  
+  table {
+    border-collapse: collapse;
+  }
+  
   td {
     border: 1px solid black;
     width: 30px;
@@ -14,7 +20,11 @@
     &.outside {
       border: none;
     }
-
+    
+    &.active {
+      background-color: yellow;
+    }
+    
     .number {
       position: absolute;
       left: 1px;

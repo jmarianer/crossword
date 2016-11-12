@@ -15,6 +15,7 @@
 		"typescript": "rc",
 		"@types/node": "",
 		"@types/express": "",
+		"@types/express-less": "",
 		"typescript-simple": ""
 	},
 	"engines": {

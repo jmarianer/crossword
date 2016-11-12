@@ -5,8 +5,8 @@ import * as tss from 'typescript-simple';
 import * as url from 'url';
 import * as path from 'path';
 import * as fs from 'fs';
+import * as expressLess from 'express-less';
 const expressNunjucks = require('express-nunjucks');
-const expressLess = require('express-less');
 
 const app = express();
 app.set('views', __dirname + '/templates');
@@ -62,6 +62,8 @@ class cell {
   type : types;
   number : number;
   user_solution : string = "";
+  row : number;
+  col : number;
   
   isFillable() { return this.type == types.empty; }
 }
@@ -79,6 +81,8 @@ for (let i = 0; i < rows; i++) {
 for (let i = 1; i < rows - 1; i++) {
   for (let j = 1; j < cols - 1; j++) {
     var s = template[i-1][j-1];
+    puzzle[i][j].row = i;
+    puzzle[i][j].col = j;
     if (s == '.' || s == undefined) {
       puzzle[i][j].type = types.black;
     } else {
