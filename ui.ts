@@ -1,5 +1,5 @@
-/// <reference types="jquery" />
-declare var $, io;
+import * as $ from 'jquery';
+import * as io from 'socket.io-client';
 var socket = io();
 
 function activate(elt) {

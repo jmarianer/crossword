@@ -6,21 +6,26 @@
 		"start": "ts-node server.ts"
 	},
 	"dependencies": {
-		"express": "^4.12.4",
-		"express-nunjucks": "",
-		"nunjucks": "",
-		"express-less": "",
-		"ts-node": "",
-		"typescript": "rc",
-		"@types/node": "",
+		"@types/es6-promise": "", 
 		"@types/express": "",
 		"@types/express-less": "",
-		"typescript-simple": "",
-		"socket.io": "",
+		"@types/jquery": "", 
+		"@types/mongodb": "", 
+		"@types/node": "",
 		"@types/socket.io": "",
-		"@types/mongodb": "",
+		"@types/socket.io-client": "", 
+		"body-parser": "",
+		"browserify": "",
+		"express": "^4.12.4",
+		"express-less": "",
+		"jquery": "",
 		"mongodb": "",
-		"body-parser": ""
+		"nunjucks": "",
+		"socket.io": "",
+		"ts-node": "",
+		"tsify": "",
+		"typescript": "rc",
+		"typescript-simple": ""
 	},
 	"engines": {
 		"node": "6.9.1"
