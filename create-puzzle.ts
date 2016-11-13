@@ -64,12 +64,26 @@ export function createPuzzle(template_str : string) {
   let number = 1;
   for (let i = 1; i < rows - 1; i++) {
     for (let j = 1; j < cols - 1; j++) {
-      if (puzzle[i][j].isFillable() && (
-          ((!puzzle[i][j-1].isFillable()) &&
-           (puzzle[i][j+1].isFillable())) ||
-          ((!puzzle[i-1][j].isFillable()) &&
-           (puzzle[i+1][j].isFillable())))) {
-        puzzle[i][j].number = number++;
+      if (!puzzle.cells[i][j].isFillable()) {
+       continue;
+      }
+
+      let across = false, down = false;
+      if (!puzzle.cells[i][j-1].isFillable() && puzzle.cells[i][j+1].isFillable()) {
+        across = true;
+      }
+      if (!puzzle.cells[i-1][j].isFillable() && puzzle.cells[i+1][j].isFillable()) {
+        down = true;
+      }
+
+      if (across) {
+        puzzle.clues.push(new clue(number, clue_direction.across, i, j));
+      }
+      if (down) {
+        puzzle.clues.push(new clue(number, clue_direction.down, i, j));
+      }
+      if (across || down) {
+        puzzle.cells[i][j].number = number++;
       }
     }
   }
