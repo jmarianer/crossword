@@ -36,6 +36,13 @@ function findCell(position : position) {
   return $('.crossword td[data-row="' + position.row + '"][data-col="' + position.col + '"]');
 }
 
+function moveTo(position : position) {
+  var elt = findCell(position);
+  if (elt.length) {
+    activate(elt);
+  }
+}
+
 function move(position : position, drow : number, dcol : number) {
   for (;;) {
     position.row += drow;
@@ -70,7 +77,7 @@ $(function() {
 
   $('.clue').click(function() {
     current_direction = $(this).data().direction;
-    move(getElementPosition($(this)), 0, 0);
+    moveTo(getElementPosition($(this)));
   });
 
   $('body').keydown(function(e) {
@@ -101,7 +108,7 @@ $(function() {
       } else {
         current_direction = clue_direction.across;
       }
-      move(position, 0, 0);
+      moveTo(position);
     }
   });
 });
