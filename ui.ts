@@ -86,7 +86,7 @@ $(function() {
     var key = e.key;
     var position = getElementPosition($('.active'));
     if (key.length == 1) {
-      sendSolution(position, e.key.toUpperCase());
+      sendSolution(position, e.key);
       if (current_direction == clue_direction.across) {
         move(position, 0, 1);
       } else {

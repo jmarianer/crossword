@@ -106,6 +106,10 @@ MongoClient.connect(process.env.MONGODB, function(err, db) {
     io_listener.on('connection', function(socket) {
       let puzzid = path.basename(socket.client.request.headers.referer);
       socket.on('solution', function(msg : message) {
+        msg.solution = msg.solution.toUpperCase();
+        if (msg.solution.match(/[םןףץך]/)) {
+          msg.solution = String.fromCharCode(msg.solution.charCodeAt(0) + 1);
+        }
         puzzles[puzzid].cells[msg.position.row][msg.position.col].solution = msg.solution;
         db.collection('crosswords').update({_id: new ObjectID(puzzid)}, {$set: {puzzle: puzzles[puzzid]}})
         io_listener.emit('solution', msg);
