@@ -1,7 +1,7 @@
 import * as $ from 'jquery';
 import * as io from 'socket.io-client';
 import { message } from './types';
-var socket = io();
+let socket = io();
 
 function activate(elt : JQuery) {
   $('.active').removeClass('active');
@@ -16,7 +16,7 @@ function move(row : number, col : number, drow : number, dcol : number) {
   for (;;) {
     row += drow;
     col += dcol;
-    var elt = find(row, col);
+    let elt = find(row, col);
     if (elt.length) {
       activate(elt);
       return;
@@ -30,7 +30,7 @@ function move(row : number, col : number, drow : number, dcol : number) {
 
 function sendSolution(data : any, solution : string) {  // XXX I don't think this should be "any"
   if (data != null) {
-    var msg : message = {
+    let msg : message = {
       row: data.row,
       col: data.col,
       solution: solution,
@@ -45,10 +45,10 @@ $(function() {
   });
 
   $('body').keydown(function(e) {
-    var direction = $('.crossword').css('direction') == 'ltr' ? 1 : -1;
+    let direction = $('.crossword').css('direction') == 'ltr' ? 1 : -1;
   
-    var key = e.key;
-    var data = $('.active').data();
+    let key = e.key;
+    let data = $('.active').data();
     if (key.length == 1) {
       sendSolution(data, e.key.toUpperCase());
     } else if (key == 'ArrowLeft') {

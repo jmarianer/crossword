@@ -27,7 +27,7 @@ browserify('ui.ts')
     if (err) {
       console.log(err);
     }
-    var js = buf.toString();
+    let js = buf.toString();
     app.use('/js/crossword.js', function(req, res, next) {
       res.set('Content-Type', 'text/javascript');
       res.send(buf.toString());
@@ -51,7 +51,7 @@ MongoClient.connect(process.env.MONGODB, function(err, db) {
     }
 
     app.get("/puzzle/*", function (request, response) {
-      var puzzid = path.basename(request.url);
+      let puzzid = path.basename(request.url);
       response.render('puzzle.html', {
         puzzle: puzzles[puzzid],
         cellType: cellType,
@@ -63,26 +63,26 @@ MongoClient.connect(process.env.MONGODB, function(err, db) {
     });
     
     app.post('/created', function (request, response) {
-      var newPuzzle = createPuzzle(request.body.template);
+      let newPuzzle = createPuzzle(request.body.template);
       
       db.collection('crosswords').insert({
         puzzle: newPuzzle,
       }, function(err, result) {
         if (err) throw err;
         
-        var id = result.ops[0]._id;
+        let id = result.ops[0]._id;
         puzzles[id] = newPuzzle;
         response.redirect('/puzzle/' + id);
       });
     });
 
-    var listener = app.listen(process.env.PORT, function () {
+    let listener = app.listen(process.env.PORT, function () {
       console.log('Your app is up');
     });
     
-    var io_listener = io(listener)
+    let io_listener = io(listener)
     io_listener.on('connection', function(socket) {
-      var puzzid = path.basename(socket.client.request.headers.referer);
+      let puzzid = path.basename(socket.client.request.headers.referer);
       socket.on('solution', function(msg : message) {
         puzzles[puzzid][msg.row][msg.col].user_solution = msg.solution;
         db.collection('crosswords').update({_id: new ObjectID(puzzid)}, {$set: {puzzle: puzzles[puzzid]}})

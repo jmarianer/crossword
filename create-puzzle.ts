@@ -8,7 +8,7 @@ export function createPuzzle(template_str : string) {
   const rows = template.length + 2;
   const cols = Math.max(...template.map(f=>f.length)) + 2;
   
-  var puzzle : cell[][];
+  let puzzle : cell[][];
   puzzle = [];
   
   for (let i = 0; i < rows; i++) {
@@ -23,7 +23,7 @@ export function createPuzzle(template_str : string) {
     for (let j = 1; j < cols - 1; j++) {
       puzzle[i][j].row = i;
       puzzle[i][j].col = j;
-      var s = template[i-1][j-1];
+      let s = template[i-1][j-1];
       if (s == '.' || s == undefined) {
         puzzle[i][j].type = cellType.black;
       } else {
@@ -60,7 +60,7 @@ export function createPuzzle(template_str : string) {
     }
   }
   
-  var number = 1;
+  let number = 1;
   for (let i = 1; i < rows - 1; i++) {
     for (let j = 1; j < cols - 1; j++) {
       if (puzzle[i][j].isFillable() && (
