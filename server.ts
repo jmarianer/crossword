@@ -3,6 +3,7 @@
 import { cell, cellType, clue_direction, message, puzzle } from './types'
 import { createPuzzle } from './create-puzzle'
 import { MongoClient, ObjectID } from 'mongodb'
+import { l10n } from './l10n'
 import * as express from 'express';
 import * as tss from 'typescript-simple';
 import * as url from 'url';
@@ -49,33 +50,13 @@ MongoClient.connect(process.env.MONGODB, function(err, db) {
       puzzles[i._id] = i.puzzle;
     }
 
-    let l10n : {[id: string]: string} = {};
-    // XXX Hebrew
-    if (true) {
-      l10n = {
-        title: 'אפליקצית התשבצים המגניבה™',
-        no_clue: 'לא ניתנה הגדרה.',
-        direction: 'rtl',
-        across: 'אפקי',
-        down: 'אנכי',
-      }
-    } else {
-      /*
-      title = "Joey's awesome crossword app™";
-      no_clue = "No clue given.";
-      direction = "ltr";
-        across: 'across',
-        down: 'down',
-      */
-    }
-
     app.get("/puzzle/*", function (request, response) {
       let puzzid = path.basename(request.url);
       response.render('puzzle.html', {
         puzzle: puzzles[puzzid],
         cellType: cellType,
         clue_direction: clue_direction,
-        l10n: l10n,
+        l10n: l10n[puzzles[puzzid].language],
       });
     });
     

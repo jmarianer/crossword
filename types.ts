@@ -4,11 +4,6 @@ export enum cellType {
   outside,
 }
 
-export enum puzzle_direction {
-  ltr,
-  rtl,
-}
-
 export enum clue_direction {
   across,
   down,
@@ -56,7 +51,7 @@ export class message {
 }
 
 export class puzzle {
-  direction : puzzle_direction;
+  language : string;
   cells : cell[][] = [];
   clues : clue[];
 }
