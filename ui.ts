@@ -33,7 +33,7 @@ function activate(elt : JQuery) {
 }
 
 function findCell(position : position) {
-  return $('[data-row="' + position.row + '"][data-col="' + position.col + '"]');
+  return $('.crossword td[data-row="' + position.row + '"][data-col="' + position.col + '"]');
 }
 
 function move(position : position, drow : number, dcol : number) {
@@ -66,6 +66,11 @@ function sendSolution(position : position, solution : string) {
 $(function() {
   $('.empty').click(function() {
     activate($(this));
+  });
+
+  $('.clue').click(function() {
+    current_direction = $(this).data().direction;
+    move(getElementPosition($(this)), 0, 0);
   });
 
   $('body').keydown(function(e) {

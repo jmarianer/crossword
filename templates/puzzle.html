@@ -20,7 +20,7 @@
                 {% for clue in cell.clues %}
                   {{ clue.number }}{{ clue_direction[clue.direction] }}
                 {% endfor %}
-                " data-row="{{cell.position.row}}" data-col="{{cell.position.col}}">
+                " data-row="{{ cell.position.row }}" data-col="{{ cell.position.col }}">
                 {% if cell.number != undefined %}
                   <div class="number">{{ cell.number }}</div>
                 {% endif %}
@@ -32,21 +32,25 @@
       {% endfor %}
     </table>
     <div class="clues">
+      {% macro showClue(clue) %}
+        <span class="{{ clue.number }}{{ clue_direction[clue.direction] }} clue"
+           data-row="{{ clue.initial_position.row }}"
+           data-col="{{ clue.initial_position.col }}"
+           data-direction = "{{ clue_direction[clue.direction] }}">
+          {{ clue.number }}. {{ clue.clue if clue.clue else l10n.no_clue }}
+        </span>
+      {% endmacro %}
       <b>{{ l10n.across }}:</b>
       {% for clue in puzzle.clues %}
         {% if clue.direction == clue_direction.across %}
-          <span class="{{ clue.number }}across">
-            {{ clue.number }}. {{ clue.clue if clue.clue else l10n.no_clue }}
-          </span>
+          {{ showClue(clue) }}
         {% endif %}
       {% endfor %}
       <br />
       <b>{{ l10n.down }}:</b>
       {% for clue in puzzle.clues %}
         {% if clue.direction == clue_direction.down %}
-          <span class="{{ clue.number }}down">
-            {{ clue.number }}. {{ clue.clue if clue.clue else l10n.no_clue }}
-          </span>
+          {{ showClue(clue) }}
         {% endif %}
       {% endfor %}
     </div>
