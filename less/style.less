@@ -6,6 +6,13 @@ body {
   background-color: #FFEBC2;
 }
 
+[dir="rtl"] .number {
+  right: 1px;
+}
+[dir="ltr"] .number {
+  left: 1px;
+}
+
 .crossword {
   display: flex;
   flex-direction: column;
@@ -48,7 +55,6 @@ body {
 
     .number {
       position: absolute;
-      left: 1px;
       top: 1px;
       font-size: smaller;
     }
