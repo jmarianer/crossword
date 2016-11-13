@@ -88,15 +88,15 @@ export function createPuzzle(template_str : string) {
   }
 
   for (let clue of puzzle.clues) {
-    let position = clue.initial_position;
-    while (puzzle.cells[position.row][position.col].isFillable()) {
-      puzzle.cells[position.row][position.col].clues.push(
+    let current_position = new position(clue.initial_position.row, clue.initial_position.col);
+    while (puzzle.cells[current_position.row][current_position.col].isFillable()) {
+      puzzle.cells[current_position.row][current_position.col].clues.push(
         {number: clue.number, direction: clue.direction});
       if (clue.direction == clue_direction.across) {
-        position.col++;
+        current_position.col++;
       }
       else {
-        position.row++;
+        current_position.row++;
       }
     }
   }
