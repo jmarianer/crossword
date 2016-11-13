@@ -1,6 +1,6 @@
 /// <reference types="node" />
 
-import { cell, cellType, message, puzzle } from './types'
+import { cell, cellType, clue_direction, message, puzzle } from './types'
 import { createPuzzle } from './create-puzzle'
 import { MongoClient, ObjectID } from 'mongodb'
 import * as express from 'express';
@@ -55,6 +55,7 @@ MongoClient.connect(process.env.MONGODB, function(err, db) {
       response.render('puzzle.html', {
         puzzle: puzzles[puzzid],
         cellType: cellType,
+        clue_direction: clue_direction,
       });
     });
     

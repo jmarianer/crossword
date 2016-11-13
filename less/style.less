@@ -8,8 +8,9 @@ body {
 
 .crossword {
   display: flex;
-  justify-content: center;
-  
+  flex-direction: column;
+  align-items: center;  
+
   table {
     border-collapse: collapse;
   }
@@ -50,6 +51,19 @@ body {
       left: 1px;
       top: 1px;
       font-size: smaller;
+    }
+  }
+
+  .clues {
+    max-width: 400px;
+    border: 1px solid black;
+
+    .active-word {
+      color: #006DFF;
+    }
+
+    .passive-word {
+      color: #0051FF
     }
   }
 }

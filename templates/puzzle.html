@@ -22,4 +22,23 @@
       </tr>
     {% endfor %}
   </table>
+  <div class="clues">
+    <b>Across:</b>
+    {% for clue in puzzle.clues %}
+      {% if clue.direction == clue_direction.across %}
+        <span class="{{ clue.number }}across">
+          {{ clue.number }}. {{ clue.clue if clue.clue else "No clue given." }}
+        </span>
+      {% endif %}
+    {% endfor %}
+    <br />
+    <b>Down:</b>
+    {% for clue in puzzle.clues %}
+      {% if clue.direction == clue_direction.down %}
+        <span class="{{ clue.number }}down">
+          {{ clue.number }}. {{ clue.clue if clue.clue else "No clue given." }}
+        </span>
+      {% endif %}
+    {% endfor %}
+</div>
 </div>
