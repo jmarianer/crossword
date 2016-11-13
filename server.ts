@@ -11,10 +11,9 @@ import * as fs from 'fs';
 import * as expressLess from 'express-less';
 import * as io from 'socket.io';
 import * as nunjucks from 'nunjucks'; 
-//XXX figure out why these can't be imported
-//import * as bodyParser from 'body-parser';
-const bodyParser = require('body-parser');
-const browserify = require('browserify');
+import * as browserify from 'browserify';
+import * as bodyParser from 'body-parser';
+//XXX figure out why this can't be imported
 const tsify = require('tsify');
 
 const app = express();
