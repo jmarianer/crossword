@@ -111,6 +111,8 @@ $(function() {
       moveTo(position);
     }
   });
+
+  move(new position(1, 0), 0, 1);
 });
 
 socket.on('solution', function (msg : message) {
