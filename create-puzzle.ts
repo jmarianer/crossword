@@ -3,7 +3,6 @@ import { MongoClient } from 'mongodb'
 
 export function createPuzzle(template_str : string) {
   let template = template_str.split("\n").map(s => s.replace(/(\r\n|\n|\r)/gm, ""));
-  console.log(template);
   
   const rows = template.length + 2;
   const cols = Math.max(...template.map(f=>f.length)) + 2;
@@ -84,6 +83,20 @@ export function createPuzzle(template_str : string) {
       }
       if (across || down) {
         puzzle.cells[i][j].number = number++;
+      }
+    }
+  }
+
+  for (let clue of puzzle.clues) {
+    let position = clue.initial_position;
+    while (puzzle.cells[position.row][position.col].isFillable()) {
+      puzzle.cells[position.row][position.col].clues.push(
+        {number: clue.number, direction: clue.direction});
+      if (clue.direction == clue_direction.across) {
+        position.col++;
+      }
+      else {
+        position.row++;
       }
     }
   }

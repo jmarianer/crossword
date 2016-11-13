@@ -41,7 +41,7 @@ export class cell {
   solution : string = "";
   type : cellType;
   number : number;
-  clues : { number : number; direction : clue_direction }[];
+  clues : { number : number; direction : clue_direction }[] = [];
   position : position;
 
   constructor(row : number, col : number) { 

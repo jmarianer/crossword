@@ -10,8 +10,16 @@ function getElementPosition(elt: JQuery) {
 }
 
 function activate(elt : JQuery) {
-  $('.crossword td').removeClass('active active-word passive-word');
+  $('*').removeClass('active active-word passive-word');
   elt.addClass('active');
+
+  let classes = elt.attr('class').split(/\s+/);
+  classes
+    .filter(i => (i.match(/across$/)))
+    .forEach(i => $('.' + i).addClass('active-word'));
+  classes
+    .filter(i => (i.match(/down/)))
+    .forEach(i => $('.' + i).addClass('passive-word'));
 }
 
 function findCell(position : position) {

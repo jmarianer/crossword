@@ -12,7 +12,11 @@
           {% elif cell.type == cellType.outside %}
             <td class="outside"></td>
           {% else %}
-            <td class="empty" data-row="{{cell.position.row}}" data-col="{{cell.position.col}}">
+            <td class="empty 
+              {% for clue in cell.clues %}
+                {{ clue.number }}{{ clue_direction[clue.direction] }}
+              {% endfor %}
+              " data-row="{{cell.position.row}}" data-col="{{cell.position.col}}">
               {% if cell.number != undefined %}
                 <div class="number">{{ cell.number }}</div>
               {% endif %}
