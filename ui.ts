@@ -1,8 +1,9 @@
 import * as $ from 'jquery';
 import * as io from 'socket.io-client';
-import { message, position } from './types';
+import { clue_direction, message, position } from './types';
 
 let socket = io();
+let current_direction = clue_direction.across;
 
 function getElementPosition(elt: JQuery) {
   var data = elt.data();
@@ -14,12 +15,21 @@ function activate(elt : JQuery) {
   elt.addClass('active');
 
   let classes = elt.attr('class').split(/\s+/);
-  classes
-    .filter(i => (i.match(/across$/)))
-    .forEach(i => $('.' + i).addClass('active-word'));
-  classes
-    .filter(i => (i.match(/down/)))
-    .forEach(i => $('.' + i).addClass('passive-word'));
+  if (current_direction == clue_direction.across) {
+    classes
+      .filter(i => (i.match(/across$/)))
+      .forEach(i => $('.' + i).addClass('active-word'));
+    classes
+      .filter(i => (i.match(/down$/)))
+      .forEach(i => $('.' + i).addClass('passive-word'));
+  } else {
+    classes
+      .filter(i => (i.match(/down$/)))
+      .forEach(i => $('.' + i).addClass('active-word'));
+    classes
+      .filter(i => (i.match(/across/)))
+      .forEach(i => $('.' + i).addClass('passive-word'));
+  }
 }
 
 function findCell(position : position) {
@@ -65,6 +75,11 @@ $(function() {
     var position = getElementPosition($('.active'));
     if (key.length == 1) {
       sendSolution(position, e.key.toUpperCase());
+      if (current_direction == clue_direction.across) {
+        move(position, 0, 1);
+      } else {
+        move(position, 1, 0);
+      }
     } else if (key == 'ArrowLeft') {
       move(position, 0, -direction);
     } else if (key == 'ArrowRight') {
@@ -75,6 +90,13 @@ $(function() {
       move(position, 1, 0);
     } else if (key == 'Backspace') {
       sendSolution(position, ' ');
+    } else if (key == 'Enter') {
+      if (current_direction == clue_direction.across) {
+        current_direction = clue_direction.down;
+      } else {
+        current_direction = clue_direction.across;
+      }
+      move(position, 0, 0);
     }
   });
 });
