@@ -1,38 +1,44 @@
 import * as $ from 'jquery';
 import * as io from 'socket.io-client';
-import { message } from './types';
+import { message, position } from './types';
+
 let socket = io();
 
+function getElementPosition(elt: JQuery) {
+  var data = elt.data();
+  return new position(data.row, data.col);
+}
+
 function activate(elt : JQuery) {
-  $('.active').removeClass('active');
-  $(elt).addClass('active');
+  $('.crossword td').removeClass('active active-word passive-word');
+  elt.addClass('active');
 }
 
-function find(row : number, col : number) {
-  return $('[data-row="' + row + '"][data-col="' + col + '"]');
+function findCell(position : position) {
+  return $('[data-row="' + position.row + '"][data-col="' + position.col + '"]');
 }
 
-function move(row : number, col : number, drow : number, dcol : number) {
+function move(position : position, drow : number, dcol : number) {
   for (;;) {
-    row += drow;
-    col += dcol;
-    let elt = find(row, col);
+    position.row += drow;
+    position.col += dcol;
+    var elt = findCell(position);
     if (elt.length) {
       activate(elt);
       return;
     }
+
     // TODO: these 100s are bogus.
-    if (row < 0 || row > 100 || col < 0 || col > 100) {
+    if (position.row < 0 || position.row > 100 || position.col < 0 || position.col > 100) {
       return;
     }
   }
 }
 
-function sendSolution(data : any, solution : string) {  // XXX I don't think this should be "any"
-  if (data != null) {
-    let msg : message = {
-      row: data.row,
-      col: data.col,
+function sendSolution(position : position, solution : string) {
+  if (position != null) {
+    var msg : message = {
+      position: position,
       solution: solution,
     };
     socket.emit('solution', msg);
@@ -41,30 +47,30 @@ function sendSolution(data : any, solution : string) {  // XXX I don't think thi
 
 $(function() {
   $('.empty').click(function() {
-    activate(this);
+    activate($(this));
   });
 
   $('body').keydown(function(e) {
-    let direction = $('.crossword').css('direction') == 'ltr' ? 1 : -1;
+    var direction = $('.crossword').css('direction') == 'ltr' ? 1 : -1;
   
-    let key = e.key;
-    let data = $('.active').data();
+    var key = e.key;
+    var position = getElementPosition($('.active'));
     if (key.length == 1) {
-      sendSolution(data, e.key.toUpperCase());
+      sendSolution(position, e.key.toUpperCase());
     } else if (key == 'ArrowLeft') {
-      move(data.row, data.col, 0, -direction);
+      move(position, 0, -direction);
     } else if (key == 'ArrowRight') {
-      move(data.row, data.col, 0, direction);
+      move(position, 0, direction);
     } else if (key == 'ArrowUp') {
-      move(data.row, data.col, -1, 0);
+      move(position, -1, 0);
     } else if (key == 'ArrowDown') {
-      move(data.row, data.col, 1, 0);
+      move(position, 1, 0);
     } else if (key == 'Backspace') {
-      sendSolution(data, ' ');
+      sendSolution(position, ' ');
     }
   });
 });
 
 socket.on('solution', function (msg : message) {
-  find(msg.row, msg.col).find('.solution').html(msg.solution);
+  findCell(msg.position).find('.solution').html(msg.solution);
 });

@@ -1,4 +1,4 @@
-import { cell, cellType } from './types'
+import { cell, cellType, clue, clue_direction, puzzle, position, puzzle_direction } from './types'
 import { MongoClient } from 'mongodb'
 
 export function createPuzzle(template_str : string) {
@@ -8,49 +8,50 @@ export function createPuzzle(template_str : string) {
   const rows = template.length + 2;
   const cols = Math.max(...template.map(f=>f.length)) + 2;
   
-  let puzzle : cell[][];
-  puzzle = [];
+  let puzzle : puzzle = {
+    direction: puzzle_direction.ltr,
+    cells: [],
+    clues: [],
+  };
   
   for (let i = 0; i < rows; i++) {
     let row : cell[] = [];
     for (let j = 0; j < cols; j++) {
-      row.push(new cell());
+      row.push(new cell(i, j));
     }
-    puzzle.push(row);
+    puzzle.cells.push(row);
   }
   
   for (let i = 1; i < rows - 1; i++) {
     for (let j = 1; j < cols - 1; j++) {
-      puzzle[i][j].row = i;
-      puzzle[i][j].col = j;
+      let cell = puzzle.cells[i][j];
       let s = template[i-1][j-1];
       if (s == '.' || s == undefined) {
-        puzzle[i][j].type = cellType.black;
+        cell.type = cellType.black;
       } else {
-        puzzle[i][j].solution = s;
-        puzzle[i][j].type = cellType.empty;
+        cell.type = cellType.empty;
       }
     }
   }
   for (let i = 0; i < rows; i++) {
-    puzzle[i][0].type = cellType.outside;
-    puzzle[i][cols-1].type = cellType.outside;
+    puzzle.cells[i][0].type = cellType.outside;
+    puzzle.cells[i][cols-1].type = cellType.outside;
   }
   for (let j = 0; j < cols; j++) {
-    puzzle[0][j].type = cellType.outside;
-    puzzle[rows-1][j].type = cellType.outside;
+    puzzle.cells[0][j].type = cellType.outside;
+    puzzle.cells[rows-1][j].type = cellType.outside;
   }
   
   for (;;) {
     let changed = false;
     for (let i = 1; i < rows - 1; i++) {
       for (let j = 1; j < cols - 1; j++) {
-        if (puzzle[i][j].type == cellType.black && (
-            puzzle[i][j-1].type == cellType.outside ||
-            puzzle[i][j+1].type == cellType.outside ||
-            puzzle[i-1][j].type == cellType.outside ||
-            puzzle[i+1][j].type == cellType.outside)) {
-            puzzle[i][j].type = cellType.outside;
+        if (puzzle.cells[i][j].type == cellType.black && (
+            puzzle.cells[i][j-1].type == cellType.outside ||
+            puzzle.cells[i][j+1].type == cellType.outside ||
+            puzzle.cells[i-1][j].type == cellType.outside ||
+            puzzle.cells[i+1][j].type == cellType.outside)) {
+            puzzle.cells[i][j].type = cellType.outside;
           changed = true;
         }
       }

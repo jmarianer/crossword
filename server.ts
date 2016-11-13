@@ -1,6 +1,6 @@
 /// <reference types="node" />
 
-import { cell, cellType, message } from './types'
+import { cell, cellType, message, puzzle } from './types'
 import { createPuzzle } from './create-puzzle'
 import { MongoClient, ObjectID } from 'mongodb'
 import * as express from 'express';
@@ -45,7 +45,7 @@ MongoClient.connect(process.env.MONGODB, function(err, db) {
   db.collection('crosswords').find().toArray(function(err, data) {
     if (err) throw err;
 
-    let puzzles : {[id: string]: cell[][]} = {};
+    let puzzles : {[id: string]: puzzle} = {};
     for (let i of data) {
       puzzles[i._id] = i.puzzle;
     }
@@ -84,7 +84,7 @@ MongoClient.connect(process.env.MONGODB, function(err, db) {
     io_listener.on('connection', function(socket) {
       let puzzid = path.basename(socket.client.request.headers.referer);
       socket.on('solution', function(msg : message) {
-        puzzles[puzzid][msg.row][msg.col].user_solution = msg.solution;
+        puzzles[puzzid].cells[msg.position.row][msg.position.col].solution = msg.solution;
         db.collection('crosswords').update({_id: new ObjectID(puzzid)}, {$set: {puzzle: puzzles[puzzid]}})
         io_listener.emit('solution', msg);
       });

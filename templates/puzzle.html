@@ -3,7 +3,7 @@
 
 <div class="crossword">
   <table>
-    {% for row in puzzle %}
+    {% for row in puzzle.cells %}
       <tr>
         {% for cell in row %}
           {% if cell.type == cellType.black %}
@@ -11,11 +11,11 @@
           {% elif cell.type == cellType.outside %}
             <td class="outside"></td>
           {% else %}
-            <td class="empty" data-row="{{cell.row}}" data-col="{{cell.col}}">
+            <td class="empty" data-row="{{cell.position.row}}" data-col="{{cell.position.col}}">
               {% if cell.number != undefined %}
                 <div class="number">{{ cell.number }}</div>
               {% endif %}
-              <span class="solution">{{ cell.user_solution }}</span>
+              <span class="solution">{{ cell.solution }}</span>
             </td>
           {% endif %}
         {% endfor %}
