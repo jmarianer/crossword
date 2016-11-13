@@ -2,6 +2,10 @@
   font-family: monospace;
 }
 
+body {
+  background-color: #FFEBC2;
+}
+
 .crossword {
   display: flex;
   justify-content: center;
@@ -25,8 +29,20 @@
       border: none;
     }
     
+    &.empty {
+      background-color: white;
+    }
+
     &.active {
-      background-color: yellow;
+      background-color: #80B3FF;
+    }
+
+    &.active-word {
+      background-color: #B3D0FF;
+    }
+
+    &.passive-word {
+      background-color: #E6F0FF;
     }
     
     .number {
