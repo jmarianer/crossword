@@ -76,7 +76,7 @@ $(function() {
   });
 
   $('.clue').click(function() {
-    current_direction = $(this).data().direction;
+    current_direction = <clue_direction><any>clue_direction[$(this).data().direction];
     moveTo(getElementPosition($(this)));
   });
 
