@@ -63,13 +63,23 @@ body {
   .clues {
     max-width: 400px;
     border: 1px solid black;
+    padding: 10px;
+
+    b {
+      display: block;
+      margin-top: 10px;
+
+      &:first-child {
+        margin-top: 0;
+      }
+    }
 
     .active-word {
-      color: #006DFF;
+      color: #0000FF;
     }
 
     .passive-word {
-      color: #0051FF
+      color: #8080FF
     }
 
     .clue {
