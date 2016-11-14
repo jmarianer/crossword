@@ -61,11 +61,13 @@ MongoClient.connect(process.env.MONGODB, function(err, db) {
     });
     
     app.get("/create", function (request, response) {
-      response.render('create.html');
+      response.render('create.html', {
+        languages: Object.keys(l10n),
+      });
     });
     
     app.post('/created', function (request, response) {
-      let newPuzzle = createPuzzle(request.body.template);
+      let newPuzzle = createPuzzle(request.body.template, request.body.language);
       
       db.collection('crosswords').insert({
         puzzle: newPuzzle,

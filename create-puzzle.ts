@@ -1,14 +1,14 @@
-import { cell, cellType, clue, clue_direction, puzzle, position, puzzle_direction } from './types'
+import { cell, cellType, clue, clue_direction, puzzle, position } from './types'
 import { MongoClient } from 'mongodb'
 
-export function createPuzzle(template_str : string) {
+export function createPuzzle(template_str : string, language : string) {
   let template = template_str.split("\n").map(s => s.replace(/(\r\n|\n|\r)/gm, ""));
   
   const rows = template.length + 2;
   const cols = Math.max(...template.map(f=>f.length)) + 2;
   
   let puzzle : puzzle = {
-    direction: puzzle_direction.ltr,
+    language: language,
     cells: [],
     clues: [],
   };

@@ -3,6 +3,12 @@
   <form method="post" action="/created">
     <textarea name="template" rows="25" cols="40"></textarea>
     <br>
+    <select name="language">
+      {% for lang in languages %}
+        <option value="{{ lang }}">{{ lang }}</option>
+      {% endfor %}
+    </select>
+    <br>
     <input type="submit" />
   </form>
 </div>
