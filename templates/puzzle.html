@@ -4,56 +4,54 @@
   <script src="/js/crossword.js"></script>
 </head>
 
-<body>
-<div class="crossword" dir="{{ l10n.direction }}">
-    <h1>{{ l10n.title }}</h1>
-    <table>
-      {% for row in puzzle.cells %}
-        <tr>
-          {% for cell in row %}
-            {% if cell.type == cellType.black %}
-              <td class="black"></td>
-            {% elif cell.type == cellType.outside %}
-              <td class="outside"></td>
-            {% else %}
-              <td class="empty 
-                {% for clue in cell.clues %}
-                  {{ clue.number }}{{ clue_direction[clue.direction] }}
-                {% endfor %}
-                " data-row="{{ cell.position.row }}" data-col="{{ cell.position.col }}">
-                {% if cell.number != undefined %}
-                  <div class="number">{{ cell.number }}</div>
-                {% endif %}
-                <span class="solution">{{ cell.solution }}</span>
-              </td>
-            {% endif %}
-          {% endfor %}
-        </tr>
-      {% endfor %}
-    </table>
-    <div class="clues">
-      {% macro showClue(clue) %}
-        <span class="{{ clue.number }}{{ clue_direction[clue.direction] }} clue"
-           data-row="{{ clue.initial_position.row }}"
-           data-col="{{ clue.initial_position.col }}"
-           data-direction = "{{ clue_direction[clue.direction] }}">
-          {{ clue.number }}. {{ clue.clue if clue.clue else l10n.no_clue }}
-        </span>
-      {% endmacro %}
-      <b>{{ l10n.across }}:</b>
-      {% for clue in puzzle.clues %}
-        {% if clue.direction == clue_direction.across %}
-          {{ showClue(clue) }}
-        {% endif %}
-      {% endfor %}
-      <br />
-      <b>{{ l10n.down }}:</b>
-      {% for clue in puzzle.clues %}
-        {% if clue.direction == clue_direction.down %}
-          {{ showClue(clue) }}
-        {% endif %}
-      {% endfor %}
-    </div>
+<body dir="{{ l10n.direction }}">
+  <h1>{{ l10n.title }}</h1>
+  <table class="crossword">
+    {% for row in puzzle.cells %}
+      <tr>
+        {% for cell in row %}
+          {% if cell.type == cellType.black %}
+            <td class="black"></td>
+          {% elif cell.type == cellType.outside %}
+            <td class="outside"></td>
+          {% else %}
+            <td class="empty 
+              {% for clue in cell.clues %}
+                {{ clue.number }}{{ clue_direction[clue.direction] }}
+              {% endfor %}
+              " data-row="{{ cell.position.row }}" data-col="{{ cell.position.col }}">
+              {% if cell.number != undefined %}
+                <div class="number">{{ cell.number }}</div>
+              {% endif %}
+              <span class="solution">{{ cell.solution }}</span>
+            </td>
+          {% endif %}
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </table>
+  <div class="clues">
+    {% macro showClue(clue) %}
+      <span class="{{ clue.number }}{{ clue_direction[clue.direction] }} clue"
+         data-row="{{ clue.initial_position.row }}"
+         data-col="{{ clue.initial_position.col }}"
+         data-direction = "{{ clue_direction[clue.direction] }}">
+        {{ clue.number }}. {{ clue.clue if clue.clue else l10n.no_clue }}
+      </span>
+    {% endmacro %}
+    <b>{{ l10n.across }}:</b>
+    {% for clue in puzzle.clues %}
+      {% if clue.direction == clue_direction.across %}
+        {{ showClue(clue) }}
+      {% endif %}
+    {% endfor %}
+    <br />
+    <b>{{ l10n.down }}:</b>
+    {% for clue in puzzle.clues %}
+      {% if clue.direction == clue_direction.down %}
+        {{ showClue(clue) }}
+      {% endif %}
+    {% endfor %}
   </div>
 </body>
 </html>

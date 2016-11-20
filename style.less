@@ -4,6 +4,9 @@
 
 body {
   background-color: #FFEBC2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;  
 }
 
 [dir="rtl"] .number {
@@ -14,13 +17,7 @@ body {
 }
 
 .crossword {
-  display: flex;
-  flex-direction: column;
-  align-items: center;  
-
-  table {
-    border-collapse: collapse;
-  }
+  border-collapse: collapse;
   
   td {
     border: 1px solid black;
@@ -59,35 +56,35 @@ body {
       font-size: smaller;
     }
   }
+}
 
-  .clues {
-    max-width: 400px;
-    border: 1px solid black;
-    padding: 10px;
+.clues {
+  max-width: 400px;
+  border: 1px solid black;
+  padding: 10px;
 
-    b {
-      display: block;
-      margin-top: 10px;
+  b {
+    display: block;
+    margin-top: 10px;
 
-      &:first-child {
-        margin-top: 0;
-      }
+    &:first-child {
+      margin-top: 0;
     }
+  }
 
-    .active-word {
-      color: #0000FF;
-    }
+  .active-word {
+    color: #0000FF;
+  }
 
-    .passive-word {
-      color: #8080FF
-    }
+  .passive-word {
+    color: #8080FF
+  }
 
-    .clue {
-      cursor: hand;
+  .clue {
+    cursor: hand;
 
-      &:hover {
-        color: red;
-      }
+    &:hover {
+      color: red;
     }
   }
 }
