@@ -1,30 +1,7 @@
 {% extends "base.nunj" %}
 {% block script %}crossword.js{% endblock %}
 {% block body %}
-  <table class="crossword">
-    {% for row in puzzle.cells %}
-      <tr>
-        {% for cell in row %}
-          {% if cell.type == cellType.black %}
-            <td class="black"></td>
-          {% elif cell.type == cellType.outside %}
-            <td class="outside"></td>
-          {% else %}
-            <td class="empty 
-              {% for clue in cell.clues %}
-                {{ clue.number }}{{ clue_direction[clue.direction] }}
-              {% endfor %}
-              " data-row="{{ cell.position.row }}" data-col="{{ cell.position.col }}">
-              {% if cell.number != undefined %}
-                <div class="number">{{ cell.number }}</div>
-              {% endif %}
-              <span class="solution">{{ cell.solution }}</span>
-            </td>
-          {% endif %}
-        {% endfor %}
-      </tr>
-    {% endfor %}
-  </table>
+  {% include "crossword-table.nunj" %}
   <div class="clues">
     {% macro showClue(clue) %}
       <span class="{{ clue.number }}{{ clue_direction[clue.direction] }} clue"

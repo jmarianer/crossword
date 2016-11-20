@@ -23,6 +23,7 @@
 		"jquery": "",
 		"mongodb": "",
 		"nunjucks": "",
+		"nunjucksify": "",
 		"socket.io": "",
 		"ts-node": "",
 		"tsify": "",

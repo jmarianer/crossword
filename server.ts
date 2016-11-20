@@ -14,11 +14,29 @@ import * as nunjucks from 'nunjucks';
 import * as browserify from 'browserify';
 import * as bodyParser from 'body-parser';
 import * as less from 'less';
-//XXX figure out why this can't be imported
+//XXX figure out why these can't be imported
 const tsify = require('tsify');
+const nunjucksify = require('nunjucksify');
 
 const app = express();
+
+function serve_js(url : string, ts_filename : string) {
+  browserify(ts_filename)
+    .plugin(tsify, { noImplicitAny: true })
+    .transform(nunjucksify, { })
+    .bundle((err : any, buf : Buffer) => {
+      if (err) throw err;
+      let js = buf.toString();
+      app.use(url, (req, res, next) => {
+        res.set('Content-Type', 'text/javascript');
+        res.send(buf.toString());
+      });
+    });
+}
+
 app.set('views', __dirname + '/templates');
+serve_js('/js/crossword.js', 'main_ui.ts');
+serve_js('/js/create.js', 'create_ui.ts');
 app.use(bodyParser.urlencoded({ extended: true }));
 fs.readFile('style.less', (err : any, data : Buffer) => {
   if (err) throw err;
@@ -30,18 +48,6 @@ fs.readFile('style.less', (err : any, data : Buffer) => {
     });
   });
 });
-browserify('ui.ts')
-  .plugin(tsify, { noImplicitAny: true })
-  .bundle(function(err : any, buf : Buffer) {
-    if (err) {
-      console.log(err);
-    }
-    let js = buf.toString();
-    app.use('/js/crossword.js', function(req, res, next) {
-      res.set('Content-Type', 'text/javascript');
-      res.send(buf.toString());
-    });
-  });
 
 nunjucks.configure('templates', { 
     autoescape: true, 
@@ -69,9 +75,9 @@ MongoClient.connect(process.env.MONGODB, function(err, db) {
       });
     });
     
-    app.get("/create", function (request, response) {
+    app.get("/create/:language", function (request, response) {
       response.render('create.nunj', {
-        languages: Object.keys(l10n),
+        l10n: l10n[request.params.language],
       });
     });
     
