@@ -59,8 +59,8 @@ MongoClient.connect(process.env.MONGODB, function(err, db) {
       puzzles[i._id] = i.puzzle;
     }
 
-    app.get("/puzzle/*", function (request, response) {
-      let puzzid = path.basename(request.url);
+    app.get("/puzzle/:id", function (request, response) {
+      let puzzid = request.params['id'];
       response.render('puzzle.html', {
         puzzle: puzzles[puzzid],
         cellType: cellType,
