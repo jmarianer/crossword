@@ -1,11 +1,6 @@
-<html>
-<head>
-  <link rel="stylesheet" href="/style/style.css">
-  <script src="/js/crossword.js"></script>
-</head>
-
-<body dir="{{ l10n.direction }}">
-  <h1>{{ l10n.title }}</h1>
+{% extends "base.nunj" %}
+{% block script %}crossword.js{% endblock %}
+{% block body %}
   <table class="crossword">
     {% for row in puzzle.cells %}
       <tr>
@@ -53,5 +48,4 @@
       {% endif %}
     {% endfor %}
   </div>
-</body>
-</html>
+{% endblock %}
