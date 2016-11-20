@@ -7,7 +7,7 @@ export const l10n : {[lang : string]: {[id : string]: string}} = {
     down: 'down',
   },
   Hebrew: {
-    title: 'אפליקצית התשבצים המגניבה™',
+    title: 'אפליקצית התשבצים המאוד מגניבה™',
     no_clue: 'לא ניתנה הגדרה.',
     direction: 'rtl',
     across: 'אפקי',
