@@ -61,7 +61,7 @@ MongoClient.connect(process.env.MONGODB, function(err, db) {
 
     app.get("/puzzle/:id", function (request, response) {
       let puzzid = request.params['id'];
-      response.render('puzzle.html', {
+      response.render('puzzle.nunj', {
         puzzle: puzzles[puzzid],
         cellType: cellType,
         clue_direction: clue_direction,
@@ -70,7 +70,7 @@ MongoClient.connect(process.env.MONGODB, function(err, db) {
     });
     
     app.get("/create", function (request, response) {
-      response.render('create.html', {
+      response.render('create.nunj', {
         languages: Object.keys(l10n),
       });
     });
