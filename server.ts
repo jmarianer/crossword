@@ -9,18 +9,27 @@ import * as tss from 'typescript-simple';
 import * as url from 'url';
 import * as path from 'path';
 import * as fs from 'fs';
-import * as expressLess from 'express-less';
 import * as io from 'socket.io';
 import * as nunjucks from 'nunjucks'; 
 import * as browserify from 'browserify';
 import * as bodyParser from 'body-parser';
+import * as less from 'less';
 //XXX figure out why this can't be imported
 const tsify = require('tsify');
 
 const app = express();
 app.set('views', __dirname + '/templates');
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use('/style', expressLess(__dirname + '/less'));
+fs.readFile('style.less', (err : any, data : Buffer) => {
+  if (err) throw err;
+  less.render(data.toString(), (err : any, data : Less.RenderOutput) => {
+    if (err) throw err;
+    app.use('/style/style.css', function(req, res, next) {
+      res.set('Content-Type', 'text/css');
+      res.send(data.css);
+    });
+  });
+});
 browserify('ui.ts')
   .plugin(tsify, { noImplicitAny: true })
   .bundle(function(err : any, buf : Buffer) {
