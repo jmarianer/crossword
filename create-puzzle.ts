@@ -90,6 +90,9 @@ export function createPuzzle(args : {[id : string] : string}) {
   }
 
   for (let clue of puzzle.clues) {
+    let clue_arg = clue.number + clue_direction[clue.direction];
+    clue.clue = args[clue_arg];
+
     let current_position = new position(clue.initial_position.row, clue.initial_position.col);
     while (puzzle.cells[current_position.row][current_position.col].isFillable()) {
       puzzle.cells[current_position.row][current_position.col].clues.push(

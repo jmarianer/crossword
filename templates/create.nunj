@@ -1,8 +1,11 @@
 {% extends "base.nunj" %}
 {% block script %}create.js{% endblock %}
 {% block body %}
-  <form method="post" action="/created">
-    <textarea name="template" rows="25" cols="40"></textarea>
+  <form method="post" action="/{% block action %}getClues{% endblock %}" id="crosswordInput">
+    {% block form %}
+      <textarea name="template" rows="25" cols="40"></textarea><br />
+    {% endblock %}
+    <input type="hidden" name="language" value="{{ language }}" />
     <input type="submit" />
   </form>
   <div id="rendered"></div>

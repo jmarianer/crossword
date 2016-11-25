@@ -1,0 +1,27 @@
+{% extends "create.nunj" %}
+{% block action %}created{% endblock %}
+{% macro showClue(clue) %}
+  <tr>
+    <th>{{clue.number}}.</th>
+    <td><input class="clue" name="{{ clue.number }}{{ clue_direction[clue.direction] }}" /></td>
+    <td>(<input class="clue_letters" name="{{ clue.number }}{{ clue_direction[clue.direction] }}letters" />)</td>
+  </tr>
+{% endmacro %}
+
+{% block form %}
+  <table id="clues_input">
+    <tr><th colspan=3>{{ l10n.across }}</td></tr>
+    {% for clue in puzzle.clues %}
+      {% if clue.direction == clue_direction.across %}
+        {{ showClue(clue) }}
+      {% endif %}
+    {% endfor %}
+    <tr><th colspan=3>{{ l10n.down }}</td></tr>
+    {% for clue in puzzle.clues %}
+      {% if clue.direction == clue_direction.down %}
+        {{ showClue(clue) }}
+      {% endif %}
+    {% endfor %}
+    <input type="hidden" name="template" value="{{ template }}" />
+  </table>
+{% endblock %}

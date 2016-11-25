@@ -76,8 +76,22 @@ MongoClient.connect(process.env.MONGODB, function(err, db) {
     });
     
     app.get("/create/:language", function (request, response) {
+      let language = request.params.language;
       response.render('create.nunj', {
-        l10n: l10n[request.params.language],
+        l10n: l10n[language],
+        language: language,
+      });
+    });
+
+    app.post("/getClues", function (request, response) {
+      let newPuzzle = createPuzzle(request.body);
+      let language = request.body.language;
+      response.render('clues.nunj', {
+        puzzle: newPuzzle,
+        l10n: l10n[language],
+        language: language,
+        clue_direction: clue_direction,
+        template: request.body.template,
       });
     });
     
