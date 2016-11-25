@@ -1,7 +1,9 @@
 import { cell, cellType, clue, clue_direction, puzzle, position } from './types'
 import { MongoClient } from 'mongodb'
 
-export function createPuzzle(template_str : string, language : string) {
+export function createPuzzle(args : {[id : string] : string}) {
+  let template_str : string = args['template'];
+  let language : string = args['language'];
   let template = template_str.split("\n").map(s => s.replace(/(\r\n|\n|\r)/gm, ""));
   
   const rows = template.length + 2;

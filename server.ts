@@ -82,7 +82,7 @@ MongoClient.connect(process.env.MONGODB, function(err, db) {
     });
     
     app.post('/created', function (request, response) {
-      let newPuzzle = createPuzzle(request.body.template, request.body.language);
+      let newPuzzle = createPuzzle(request.body);
       
       db.collection('crosswords').insert({
         puzzle: newPuzzle,
