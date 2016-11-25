@@ -16,6 +16,13 @@ body {
   left: 1px;
 }
 
+[dir="rtl"] .word-boundary-across {
+  border-left-width: 2px;
+}
+[dir="ltr"] .word-boundary-across {
+  border-right-width: 2px;
+}
+
 .crossword {
   border-collapse: collapse;
   
@@ -48,6 +55,10 @@ body {
     
     &.active {
       background-color: #80B3FF;
+    }
+
+    &.word-boundary-down {
+      border-bottom-width: 2px;
     }
 
     .number {

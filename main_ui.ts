@@ -17,17 +17,17 @@ function activate(elt : JQuery) {
   let classes = elt.attr('class').split(/\s+/);
   if (current_direction == clue_direction.across) {
     classes
-      .filter(i => (i.match(/across$/)))
+      .filter(i => (i.match(/\d+across$/)))
       .forEach(i => $('.' + i).addClass('active-word'));
     classes
-      .filter(i => (i.match(/down$/)))
+      .filter(i => (i.match(/\d+down$/)))
       .forEach(i => $('.' + i).addClass('passive-word'));
   } else {
     classes
-      .filter(i => (i.match(/down$/)))
+      .filter(i => (i.match(/\d+down$/)))
       .forEach(i => $('.' + i).addClass('active-word'));
     classes
-      .filter(i => (i.match(/across/)))
+      .filter(i => (i.match(/\d+across/)))
       .forEach(i => $('.' + i).addClass('passive-word'));
   }
 }

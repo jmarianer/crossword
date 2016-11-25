@@ -11,6 +11,12 @@
             {% for clue in cell.clues %}
               {{ clue.number }}{{ clue_direction[clue.direction] }}
             {% endfor %}
+            {% if cell.word_boundary_across %}
+              word-boundary-across
+            {% endif %}
+            {% if cell.word_boundary_down %}
+              word-boundary-down
+            {% endif %}
             " data-row="{{ cell.position.row }}" data-col="{{ cell.position.col }}">
             {% if cell.number != undefined %}
               <div class="number">{{ cell.number }}</div>

@@ -93,10 +93,27 @@ export function createPuzzle(args : {[id : string] : string}) {
     let clue_arg = clue.number + clue_direction[clue.direction];
     clue.clue = args[clue_arg];
 
+    let word_lengths_str = args[clue_arg + 'letters'];
+    let word_lengths : number[] = [];
+    if (word_lengths_str) {
+      word_lengths = word_lengths_str.split(',').map((s,_) => parseInt(s));
+    }
+
     let current_position = new position(clue.initial_position.row, clue.initial_position.col);
     while (puzzle.cells[current_position.row][current_position.col].isFillable()) {
       puzzle.cells[current_position.row][current_position.col].clues.push(
         {number: clue.number, direction: clue.direction});
+
+      if (--word_lengths[0] == 0 && word_lengths.length > 1) {
+        if (clue.direction == clue_direction.across) {
+          puzzle.cells[current_position.row][current_position.col].word_boundary_across = true;
+        }
+        else {
+          puzzle.cells[current_position.row][current_position.col].word_boundary_down = true;
+        }
+        word_lengths.shift();
+      }
+
       if (clue.direction == clue_direction.across) {
         current_position.col++;
       }

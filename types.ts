@@ -38,6 +38,8 @@ export class cell {
   number : number;
   clues : { number : number; direction : clue_direction }[] = [];
   position : position;
+  word_boundary_across : boolean;
+  word_boundary_down : boolean;
 
   constructor(row : number, col : number) { 
     this.position = new position(row, col);
