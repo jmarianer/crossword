@@ -17,26 +17,34 @@ import * as less from 'less';
 //XXX figure out why these can't be imported
 const tsify = require('tsify');
 const nunjucksify = require('nunjucksify');
+const concat = require('concat-stream');
 
-const app = express();
-
-function serve_js(url : string, ts_filename : string) {
+function serve_js(app: express.Express, url: string, ts_filename: string) {
+  let errors = false;
+  console.log('Compiling ' + ts_filename);
   browserify(ts_filename)
     .plugin(tsify, { noImplicitAny: true })
     .transform(nunjucksify, { })
-    .bundle((err : any, buf : Buffer) => {
-      if (err) throw err;
-      let js = buf.toString();
+    .bundle()
+    .on('error', (error: Error) => {
+      console.error(error.toString());
+      errors = true;
+    })
+    .pipe(concat((buf: Buffer) => {
+      if (errors)
+        throw 'Error compiling ' + ts_filename;
+      console.log('Finished compiling ' + ts_filename);
       app.use(url, (req, res, next) => {
         res.set('Content-Type', 'text/javascript');
         res.send(buf.toString());
       });
-    });
+    }));
 }
 
+const app = express();
 app.set('views', __dirname + '/templates');
-serve_js('/js/crossword.js', 'main_ui.ts');
-serve_js('/js/create.js', 'create_ui.ts');
+serve_js(app, '/js/crossword.js', 'main_ui.ts');
+serve_js(app, '/js/create.js', 'create_ui.ts');
 app.use(bodyParser.urlencoded({ extended: true }));
 fs.readFile('style.less', (err : any, data : Buffer) => {
   if (err) throw err;
