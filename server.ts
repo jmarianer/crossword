@@ -138,6 +138,7 @@ MongoClient.connect(process.env.MONGODB, (err, db) => {
     let ioListener = io(listener);
     ioListener.on('connection', (socket) => {
       let puzzid = path.basename(socket.client.request.headers.referer);
+      socket.join(puzzid);
       socket.on('solution', (msg: Message) => {
         msg.solution = msg.solution.toUpperCase();
         if (msg.solution.match(/[םןףץך]/)) {
@@ -145,7 +146,7 @@ MongoClient.connect(process.env.MONGODB, (err, db) => {
         }
         puzzles[puzzid].cells[msg.position.row][msg.position.col].solution = msg.solution;
         db.collection('crosswords').update({_id: new ObjectID(puzzid)}, {$set: {puzzle: puzzles[puzzid]}});
-        ioListener.emit('solution', msg);
+        ioListener.to(puzzid).emit('solution', msg);
       });
     });
   });
