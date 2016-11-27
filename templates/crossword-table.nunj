@@ -1,4 +1,4 @@
-<table class="crossword">
+<table class="crossword" data-max-row="{{ puzzle.cells.length }}" data-max-col="{{ puzzle.cells[0].length }}">
   {% for row in puzzle.cells %}
     <tr>
       {% for cell in row %}

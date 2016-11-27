@@ -53,8 +53,9 @@ function move(position: Position, drow: number, dcol: number) {
       return;
     }
 
-    // TODO: these 100s are bogus.
-    if (position.row < 0 || position.row > 100 || position.col < 0 || position.col > 100) {
+    let maxRow = $('.crossword').data('max-row');
+    let maxCol = $('.crossword').data('max-col');
+    if (position.row < 0 || position.row > maxRow || position.col < 0 || position.col > maxCol) {
       return;
     }
   }
