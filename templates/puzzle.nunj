@@ -4,23 +4,23 @@
   {% include "crossword-table.nunj" %}
   <div class="clues">
     {% macro showClue(clue) %}
-      <span class="{{ clue.number }}{{ clue_direction[clue.direction] }} clue"
-         data-row="{{ clue.initial_position.row }}"
-         data-col="{{ clue.initial_position.col }}"
-         data-direction = "{{ clue_direction[clue.direction] }}">
-        {{ clue.number }}. {{ clue.clue if clue.clue else l10n.no_clue }}
+      <span class="{{ clue.clueNumber }}{{ ClueDirection[clue.direction] }} clue"
+         data-row="{{ clue.initialPosition.row }}"
+         data-col="{{ clue.initialPosition.col }}"
+         data-direction = "{{ ClueDirection[clue.direction] }}">
+        {{ clue.clueNumber }}. {{ clue.clue if clue.clue else l10n.noClue }}
       </span>
     {% endmacro %}
     <b>{{ l10n.across }}:</b>
     {% for clue in puzzle.clues %}
-      {% if clue.direction == clue_direction.across %}
+      {% if clue.direction == ClueDirection.across %}
         {{ showClue(clue) }}
       {% endif %}
     {% endfor %}
     <br />
     <b>{{ l10n.down }}:</b>
     {% for clue in puzzle.clues %}
-      {% if clue.direction == clue_direction.down %}
+      {% if clue.direction == ClueDirection.down %}
         {{ showClue(clue) }}
       {% endif %}
     {% endfor %}

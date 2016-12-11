@@ -1,16 +1,16 @@
-export const l10n : {[lang : string]: {[id : string]: string}} = {
+export const l10n = {
   English: {
-    title: 'Joey\'s awesome crossword app™',
-    no_clue: 'No clue given.',
-    direction: 'ltr',
     across: 'across',
+    direction: 'ltr',
     down: 'down',
+    noClue: 'No Clue given.',
+    title: 'Joey\'s awesome crossword app™',
   },
   Hebrew: {
-    title: 'אפליקצית התשבצים המאוד מגניבה™',
-    no_clue: 'לא ניתנה הגדרה.',
-    direction: 'rtl',
     across: 'אפקי',
+    direction: 'rtl',
     down: 'אנכי',
+    noClue: 'לא ניתנה הגדרה.',
+    title: 'אפליקצית התשבצים המאוד מגניבה™',
   },
-}
+};

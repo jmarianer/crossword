@@ -1,12 +1,12 @@
 import * as $ from 'jquery';
 import { createPuzzle } from './create-puzzle';
-import { cellType, clue_direction } from './types'
+import { CellType, ClueDirection } from './types';
 
-let table_template = require('./templates/crossword-table.nunj');
-let clues_template = require('./templates/clues.nunj');
+// tslint:disable-next-line:no-var-requires
+let tableTemplate = require('./templates/crossword-table.nunj');
 
 function getPuzzle() {
-  let values : {[id : string] : string} = {};
+  let values: {[id: string]: string} = {};
   $.each($('#crosswordInput').serializeArray(), (_, val) => {
     values[val.name] = val.value;
   });
@@ -14,14 +14,14 @@ function getPuzzle() {
 }
 
 function renderPuzzle() {
-  $('#rendered').html(table_template({
+  $('#rendered').html(tableTemplate({
+    CellType,
+    ClueDirection,
     puzzle: getPuzzle(),
-    cellType: cellType,
-    clue_direction: clue_direction,
   }));
 }
 
-$(function() {
+$(() => {
   $('#crosswordInput *').on('change keyup paste', renderPuzzle);
   renderPuzzle();
 });

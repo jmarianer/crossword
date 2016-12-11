@@ -1,59 +1,61 @@
-export enum cellType {
+// tslint:disable:max-classes-per-file
+
+export enum CellType {
   black,
   empty,
   outside,
 }
 
-export enum clue_direction {
+export enum ClueDirection {
   across,
   down,
 }
 
-export class clue {
-  number : number;
-  direction : clue_direction;
-  initial_position : position;
-  clue : string;
+export class Clue {
+  public clueNumber: number;
+  public direction: ClueDirection;
+  public initialPosition: Position;
+  public clue: string;
 
-  constructor(number : number, direction : clue_direction, row : number, col : number) {
-    this.number = number;
+  constructor(clueNumber: number, direction: ClueDirection, row: number, col: number) {
+    this.clueNumber = clueNumber;
     this.direction = direction;
-    this.initial_position = new position(row, col);
+    this.initialPosition = new Position(row, col);
   }
 }
 
-export class position {
-  row : number;
-  col : number;
+export class Position {
+  public row: number;
+  public col: number;
 
-  constructor(row : number, col : number) { 
-    this.row = row; 
-    this.col = col; 
-  } 
-}
-
-export class cell {
-  solution : string = "";
-  type : cellType;
-  number : number;
-  clues : { number : number; direction : clue_direction }[] = [];
-  position : position;
-  word_boundary_across : boolean;
-  word_boundary_down : boolean;
-
-  constructor(row : number, col : number) { 
-    this.position = new position(row, col);
+  constructor(row: number, col: number) {
+    this.row = row;
+    this.col = col;
   }
-  isFillable() { return this.type == cellType.empty; }
 }
 
-export class message {
-  position : position;
-  solution : string;
+export class Cell {
+  public solution: string = '';
+  public type: CellType;
+  public clueNumber: number;
+  public clues: Array<{ clueNumber: number; direction: ClueDirection }> = [];
+  public position: Position;
+  public wordBoundaryAcross: boolean;
+  public wordBoundaryDown: boolean;
+
+  constructor(row: number, col: number) {
+    this.position = new Position(row, col);
+  }
+  public isFillable() { return this.type === CellType.empty; }
 }
 
-export class puzzle {
-  language : string;
-  cells : cell[][] = [];
-  clues : clue[];
+export class Message {
+  public position: Position;
+  public solution: string;
+}
+
+export class Puzzle {
+  public language: string;
+  public cells: Cell[][] = [];
+  public clues: Clue[];
 }
