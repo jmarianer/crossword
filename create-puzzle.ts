@@ -43,7 +43,7 @@ export function createPuzzle(args: any) {
     puzzle.cells[rows - 1][j].type = CellType.outside;
   }
 
-  for (;;) {
+  for (; ; ) {
     let changed = false;
     for (let i = 1; i < rows - 1; i++) {
       for (let j = 1; j < cols - 1; j++) {

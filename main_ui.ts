@@ -44,7 +44,7 @@ function moveTo(position: Position) {
 }
 
 function move(position: Position, drow: number, dcol: number) {
-  for (;;) {
+  for (; ; ) {
     position.row += drow;
     position.col += dcol;
     let elt = findCell(position);
@@ -73,7 +73,7 @@ $(() => {
   });
 
   $('.Clue').click((e) => {
-    currentDirection = <ClueDirection><any>ClueDirection[$(e.currentTarget).data().direction];
+    currentDirection = <ClueDirection> <any> ClueDirection[$(e.currentTarget).data().direction];
     moveTo(getElementPosition($(e.currentTarget)));
   });
 
