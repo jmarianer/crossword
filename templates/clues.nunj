@@ -4,7 +4,7 @@
   <tr>
     <th>{{clue.clueNumber}}.</th>
     <td><input class="clue" name="{{ clue.clueNumber }}{{ ClueDirection[clue.direction] }}" /></td>
-    <td>(<input class="clueLetters" name="{{ clue.clueNumber }}{{ ClueDirection[clue.direction] }}letters" />)</td>
+    <td>(<input class="clue-letters" name="{{ clue.clueNumber }}{{ ClueDirection[clue.direction] }}letters" />)</td>
   </tr>
 {% endmacro %}
 

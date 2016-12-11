@@ -1,77 +1,83 @@
-[name="template"] {
+[name='template'] {
   font-family: monospace;
 }
 
 body {
-  background-color: #FFEBC2;
+  align-items: center;
+  background-color: #ffebc2;
   display: flex;
   flex-direction: column;
-  align-items: center;  
 }
 
-[dir="rtl"] .number {
-  right: 1px;
-}
-[dir="ltr"] .number {
-  left: 1px;
+[dir='rtl'] {
+  .number {
+    right: 1px;
+  }
+
+  .word-boundary-across {
+    border-left-width: 3px;
+  }
 }
 
-[dir="rtl"] .word-boundary-across {
-  border-left-width: 3px;
-}
-[dir="ltr"] .word-boundary-across {
-  border-right-width: 3px;
+[dir='ltr'] {
+  .number {
+    left: 1px;
+  }
+
+  .word-boundary-across {
+    border-right-width: 3px;
+  }
 }
 
 .crossword {
   border-collapse: collapse;
-  
+
   td {
     border: 1px solid black;
-    width: 30px;
     height: 30px;
     position: relative;
     text-align: center;
-    
-    &.black {
-      background-color: black;
-    }
-    
-    &.outside {
-      border: none;
-    }
-    
-    &.empty {
-      background-color: white;
-    }
-
-    &.active-word {
-      background-color: #B3D0FF;
-    }
-
-    &.passive-word {
-      background-color: #E6F0FF;
-    }
-    
-    &.active {
-      background-color: #80B3FF;
-    }
-
-    &.word-boundary-down {
-      border-bottom-width: 3px;
-    }
+    width: 30px;
 
     .number {
+      font-size: smaller;
       position: absolute;
       top: 1px;
-      font-size: smaller;
     }
+  }
+
+  .black {
+    background-color: black;
+  }
+
+  .outside {
+    border: 0px;
+  }
+
+  .empty {
+    background-color: white;
+  }
+
+  .active-word {
+    background-color: #b3d0ff;
+  }
+
+  .passive-word {
+    background-color: #e6f0ff;
+  }
+
+  .active {
+    background-color: #80b3ff;
+  }
+
+  .word-boundary-down {
+    border-bottom-width: 3px;
   }
 }
 
 .clues {
-  max-width: 400px;
   border: 1px solid black;
+  max-width: 400px;
   padding: 10px;
 
   b {
@@ -79,16 +85,16 @@ body {
     margin-top: 10px;
 
     &:first-child {
-      margin-top: 0;
+      margin-top: 0px;
     }
   }
 
   .active-word {
-    color: #0000FF;
+    color: #0000ff;
   }
 
   .passive-word {
-    color: #8080FF
+    color: #8080ff;
   }
 
   .clue {
@@ -100,8 +106,6 @@ body {
   }
 }
 
-#clues_input {
-  .clue_letters {
-      width: 50px;
-  }
+.clue-letters {
+    width: 50px;
 }
