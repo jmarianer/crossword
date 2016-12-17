@@ -100,6 +100,7 @@ $(() => {
       move(position, 1, 0);
     } else if (key === 'Backspace') {
       sendSolution(position, ' ');
+      move(position, 0, -1);
     } else if (key === 'Enter') {
       if (currentDirection === ClueDirection.across) {
         currentDirection = ClueDirection.down;
