@@ -112,8 +112,25 @@ $(() => {
   });
 
   move(new Position(1, 0), 0, 1);
+
+  updateStrikethroughs();
 });
+
+function updateStrikethroughs() {
+  $('.clues .clue').each((_, clue) => {
+    let clueName = $(clue).attr('class').split(/\s+/)
+      .filter((i) => (i.match(/\d+(across|down)$/)))[0];
+    let solution = $('.crossword .' + clueName).map((__, box) => $(box).find('.solution').text()).get();
+    let emptyBoxes = solution.filter((i) => !(<string> <any> i).trim());
+    if (emptyBoxes.length) {
+      $(clue).removeClass('clue-done');
+    } else {
+      $(clue).addClass('clue-done');
+    }
+  });
+}
 
 socket.on('solution', (msg: Message) => {
   findCell(msg.position).find('.solution').html(msg.solution);
+  updateStrikethroughs();
 });
