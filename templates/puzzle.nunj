@@ -1,6 +1,7 @@
 {% extends "base.nunj" %}
 {% block script %}crossword.js{% endblock %}
 {% block body %}
+  <a href="/share/{{ id }}" class="hamburger"></a>
   {% include "crossword-table.nunj" %}
   <div class="clues">
     {% macro showClue(clue) %}

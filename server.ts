@@ -10,7 +10,7 @@ import * as browserify from 'browserify';
 import * as express from 'express';
 import * as fs from 'fs';
 import * as less from 'less';
-import { MongoClient, ObjectID } from 'mongodb';
+import { Db, MongoClient, ObjectID } from 'mongodb';
 import * as nunjucks from 'nunjucks';
 import * as path from 'path';
 import * as io from 'socket.io';
@@ -18,16 +18,14 @@ import * as tss from 'typescript-simple';
 import * as url from 'url';
 
 // tslint:disable:no-var-requires TODO figure out why these can't be imported
-const tsify = require('tsify');
-const nunjucksify = require('nunjucksify');
 const concat = require('concat-stream');
 
 function serveJs(app: express.Express, url: string, tsFilename: string) {
   let errors = false;
   console.log('Compiling ' + tsFilename);
   browserify(tsFilename)
-    .plugin(tsify, { noImplicitAny: true })
-    .transform(nunjucksify, { })
+    .plugin('tsify', { noImplicitAny: true })
+    .transform('nunjucksify', { })
     .bundle()
     .on('error', (error: Error) => {
       console.error(error.toString());
@@ -49,6 +47,7 @@ const app = express();
 app.set('views', __dirname + '/templates');
 serveJs(app, '/js/crossword.js', 'main_ui.ts');
 serveJs(app, '/js/create.js', 'create_ui.ts');
+serveJs(app, '/js/share.js', 'share_ui.ts');
 app.use(bodyParser.urlencoded({ extended: true }));
 fs.readFile('style.less', (err: any, data: Buffer) => {
   if (err) {
@@ -70,6 +69,33 @@ nunjucks.configure('templates', {
     express: app,
 });
 
+let puzzles: {[id: string]: Puzzle} = {};
+
+function fork(puzzle: Puzzle): Puzzle {
+  return JSON.parse(JSON.stringify(puzzle));
+}
+function clone(puzzle: Puzzle): Puzzle {
+  let newPuzzle = fork(puzzle);
+  for (let row of newPuzzle.cells) {
+    for (let cell of row) {
+      cell.solution = '';
+    }
+  }
+  return newPuzzle;
+}
+
+function addPuzzle(db: Db, puzzle: Puzzle, callback: (id: ObjectID) => void) {
+  db.collection('crosswords').insert({ puzzle }, (err, result) => {
+    if (err) {
+      throw err;
+    }
+
+    let id = result.ops[0]._id;
+    puzzles[id] = puzzle;
+    callback(id);
+  });
+}
+
 MongoClient.connect(process.env.MONGODB, (err, db) => {
   if (err) {
     throw err;
@@ -80,7 +106,6 @@ MongoClient.connect(process.env.MONGODB, (err, db) => {
       throw err;
     }
 
-    let puzzles: {[id: string]: Puzzle} = {};
     for (let i of data) {
       puzzles[i._id] = i.puzzle;
     }
@@ -90,6 +115,18 @@ MongoClient.connect(process.env.MONGODB, (err, db) => {
       response.render('puzzle.nunj', {
         CellType,
         ClueDirection,
+        id: puzzid,
+        l10n: l10n[puzzles[puzzid].language],
+        puzzle: puzzles[puzzid],
+      });
+    });
+
+    app.get('/share/:id', (request, response) => {
+      let puzzid = request.params.id;
+      response.render('share.nunj', {
+        CellType,
+        ClueDirection,
+        id: puzzid,
         l10n: l10n[puzzles[puzzid].language],
         puzzle: puzzles[puzzid],
       });
@@ -117,18 +154,15 @@ MongoClient.connect(process.env.MONGODB, (err, db) => {
 
     app.post('/created', (request, response) => {
       let newPuzzle = createPuzzle(request.body);
+      addPuzzle(db, newPuzzle, (id) => response.redirect('/puzzle/' + id));
+    });
 
-      db.collection('crosswords').insert({
-        puzzle: newPuzzle,
-      }, (err, result) => {
-        if (err) {
-          throw err;
-        }
+    app.get('/fork/:id', (request, response) => {
+      addPuzzle(db, fork(puzzles[request.params.id]), (id) => response.send(id));
+    });
 
-        let id = result.ops[0]._id;
-        puzzles[id] = newPuzzle;
-        response.redirect('/puzzle/' + id);
-      });
+    app.get('/clone/:id', (request, response) => {
+      addPuzzle(db, clone(puzzles[request.params.id]), (id) => response.send(id));
     });
 
     let listener = app.listen(process.env.PORT, () => {

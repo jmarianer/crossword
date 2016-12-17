@@ -1,4 +1,4 @@
-export const l10n = {
+export const l10n: any = {
   English: {
     across: 'across',
     direction: 'ltr',
