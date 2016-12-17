@@ -11,6 +11,7 @@
 		"@types/es6-promise": "",
 		"@types/express": "",
 		"@types/jquery": "",
+		"@types/jqueryui": "",
 		"@types/less": "",
 		"@types/mongodb": "",
 		"@types/node": "",
