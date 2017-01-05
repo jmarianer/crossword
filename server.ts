@@ -11,11 +11,15 @@ import * as express from 'express';
 import * as fs from 'fs';
 import * as less from 'less';
 import { Db, MongoClient, ObjectID } from 'mongodb';
-import * as nunjucks from 'nunjucks';
 import * as path from 'path';
 import * as io from 'socket.io';
 import * as tss from 'typescript-simple';
 import * as url from 'url';
+
+import puzzleTemplate = require('./templates/puzzle');
+import createTemplate = require('./templates/create');
+import shareTemplate = require('./templates/share');
+import cluesTemplate = require('./templates/clues');
 
 // tslint:disable:no-var-requires TODO figure out why these can't be imported
 const concat = require('concat-stream');
@@ -24,8 +28,7 @@ function serveJs(app: express.Express, url: string, tsFilename: string) {
   let errors = false;
   console.log('Compiling ' + tsFilename);
   browserify(tsFilename)
-    .plugin('tsify', { noImplicitAny: true })
-    .transform('nunjucksify', { })
+    .plugin('tsify', { noImplicitAny: true, jsx: 'react' })
     .bundle()
     .on('error', (error: Error) => {
       console.error(error.toString());
@@ -62,11 +65,6 @@ fs.readFile('style.less', (err: any, data: Buffer) => {
       res.send(data.css);
     });
   });
-});
-
-nunjucks.configure('templates', {
-    autoescape: true,
-    express: app,
 });
 
 let puzzles: {[id: string]: Puzzle} = {};
@@ -112,44 +110,23 @@ MongoClient.connect(process.env.MONGODB, (err, db) => {
 
     app.get('/puzzle/:id', (request, response) => {
       let puzzid = request.params.id;
-      response.render('puzzle.nunj', {
-        CellType,
-        ClueDirection,
-        id: puzzid,
-        l10n: l10n[puzzles[puzzid].language],
-        puzzle: puzzles[puzzid],
-      });
+      response.send(puzzleTemplate(puzzid, puzzles[puzzid], l10n[puzzles[puzzid].language]));
     });
 
     app.get('/share/:id', (request, response) => {
       let puzzid = request.params.id;
-      response.render('share.nunj', {
-        CellType,
-        ClueDirection,
-        id: puzzid,
-        l10n: l10n[puzzles[puzzid].language],
-        puzzle: puzzles[puzzid],
-      });
+      response.send(shareTemplate(puzzid, puzzles[puzzid], l10n[puzzles[puzzid].language]));
     });
 
     app.get('/create/:language', (request, response) => {
       let language = request.params.language;
-      response.render('create.nunj', {
-        l10n: l10n[language],
-        language,
-      });
+      response.send(createTemplate(language, l10n[language]));
     });
 
     app.post('/getClues', (request, response) => {
       let newPuzzle = createPuzzle(request.body);
       let language = request.body.language;
-      response.render('clues.nunj', {
-        ClueDirection,
-        l10n: l10n[language],
-        language,
-        puzzle: newPuzzle,
-        template: request.body.template,
-      });
+      response.send(cluesTemplate(language, newPuzzle, l10n[language], request.body.template));
     });
 
     app.post('/created', (request, response) => {

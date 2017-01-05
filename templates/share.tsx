@@ -1,8 +1,13 @@
-{% extends "base.nunj" %}
-{% block script %}share.js{% endblock %}
-{% block body %}
-  <a href="/puzzle/{{ id }}" class="hamburger"></a>
-  {% include "crossword-table.nunj" %}
+import * as React from './noreact';
+import base = require('./base');
+import crosswordTable = require('./crossword-table');
+import { Clue, Puzzle, ClueDirection } from '../types';
+
+export = (id: string, puzzle: Puzzle, l10n: any) => base(
+  'share.js',
+  l10n,
+  <a href={ `/puzzle/${ id }` } class="hamburger"></a>,
+  crosswordTable(id, puzzle),
   <div class="share">
     <h2>Share this puzzle</h2>
     <div>
@@ -25,8 +30,8 @@
         <div class="show-link" id="clone-button">Show link</div>
       </div>
     </div>
-  </div>
+  </div>,
   <div id="dialog" class="dialog" title="Share this URL">
     <code id="share-url"></code>
   </div>
-{% endblock %}
+);
