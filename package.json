@@ -6,6 +6,7 @@
 		"start": "ts-node server.ts"
 	},
 	"dependencies": {
+		"@types/async": "",
 		"@types/body-parser": "",
 		"@types/browserify": "",
 		"@types/es6-promise": "",
@@ -18,6 +19,7 @@
 		"@types/socket.io": "",
 		"@types/socket.io-client": "",
 		"array-flatten": "",
+    "async": "",
 		"body-parser": "",
 		"browserify": "",
 		"express": "^4.12.4",
