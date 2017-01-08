@@ -1,36 +1,42 @@
 import * as flatten from 'array-flatten';
+
+// tslint:disable:max-classes-per-file
+// tslint:disable:no-namespace
 declare global {
   namespace JSX {
     class Element {
-      class?: string;
-      id?: string;
-      dir?: string;
-      title?: string;
+      public class?: string;
+      public id?: string;
+      public dir?: string;
+      public title?: string;
     }
+
     class IntrinsicElements {
-      link: { rel: string; href: string };
-      script: { src: string };
-      a: { class?: string; href: string };
-      form: { class?: string; id?: string; action: string; method: string };
-      textarea: { rows: string; cols: string; name: string };
-      input: { class?: string; type?: string; name?: string; value?: string };
+      public link: { rel: string; href: string };
+      public script: { src: string };
+      public a: { class?: string; href: string };
+      public form: { class?: string; id?: string; action: string; method: string };
+      public textarea: { rows: string; cols: string; name: string };
+      public input: { class?: string; type?: string; name?: string; value?: string };
+      public th: { class?: string, colspan?: string };
+      public td: { class?: string, colspan?: string };
       [tag: string]: Element;
-      th: { class?: string, colspan?: string };
-      td: { class?: string, colspan?: string };
     }
   }
 }
 
-// Wish I could say simply "...content: flatten.NestedArray<string>", but ts doesn't like that.
-export function createElement(name: string, props: any, ...content: (string|flatten.NestedArray<string>)[]) {
-  if (name == 'br') {  // annoying special case hack :-(
+// Wish I could say simply '...content: flatten.NestedArray<string>', but ts doesn't like that.
+export function createElement(name: string, props: any, ...content: Array<string|flatten.NestedArray<string>>) {
+  if (name === 'br') {  // annoying special case hack :-(
     return '<br>';
   }
   let propsString = '';
   if (props) {
     for (let key in props) {
-      propsString += ` ${key}="${props[key]}"`;
+      if (props.hasOwnProperty(key)) {
+        propsString += ` ${key}='${props[key]}'`;
+      }
     }
   }
-  return `<${name}${propsString}>${flatten(content).join("")}</${name}>`;
+  return `<${name}${propsString}>${flatten(content).join('')}</${name}>`;
 }
