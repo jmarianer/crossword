@@ -44,5 +44,9 @@
 	"keywords": [
 		"hyperdev"
 	],
-	"license": ""
+	"license": "",
+	"devDependencies": {
+	  "lesshint": "^2.4.0",
+	  "tslint": "^4.3.1"
+	}
 }
