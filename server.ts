@@ -8,6 +8,7 @@ import { Cell, CellType, ClueDirection, Message, Puzzle } from './types';
 import * as async from 'async';
 import * as bodyParser from 'body-parser';
 import * as browserify from 'browserify';
+import concat = require('concat-stream');
 import * as express from 'express';
 import * as fs from 'fs';
 import * as less from 'less';
@@ -21,9 +22,6 @@ import puzzleTemplate = require('./templates/puzzle');
 import createTemplate = require('./templates/create');
 import shareTemplate = require('./templates/share');
 import cluesTemplate = require('./templates/clues');
-
-// tslint:disable:no-var-requires TODO write "@types/concat-stream"
-const concat = require('concat-stream');
 
 // Globals
 let puzzles: {[id: string]: Puzzle} = {};

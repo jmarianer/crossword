@@ -9,6 +9,7 @@
 		"@types/async": "",
 		"@types/body-parser": "",
 		"@types/browserify": "",
+		"@types/concat-stream": "",
 		"@types/es6-promise": "",
 		"@types/express": "",
 		"@types/jquery": "",
