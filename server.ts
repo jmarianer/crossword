@@ -1,6 +1,4 @@
 // tslint:disable:no-console
-/// <reference types="node" />
-
 import { createPuzzle } from './create-puzzle';
 import { l10n } from './l10n';
 import { Cell, CellType, ClueDirection, Message, Puzzle } from './types';

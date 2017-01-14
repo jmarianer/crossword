@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"description": "A collaborative crossword-filling app",
 	"scripts": {
-		"start": "ts-node server.ts"
+		"start": "ts-node -O '{\"noImplicitAny\":true,\"jsx\":\"react\",\"typeRoots\":[\"types\"],\"baseUrl\":\"types\"}' server.ts"
 	},
 	"dependencies": {
 		"@types/async": "",
