@@ -12,11 +12,11 @@ declare global {
     }
 
     class IntrinsicElements {
-      public link: { rel: string; href: string };
-      public script: { src: string };
+      public link: { class?: string; rel: string; href: string };
+      public script: { class?: string; src: string };
       public a: { class?: string; href: string };
       public form: { class?: string; id?: string; action: string; method: string };
-      public textarea: { rows: string; cols: string; name: string };
+      public textarea: { class?: string; rows: string; cols: string; name: string };
       public input: { class?: string; type?: string; name?: string; value?: string };
       public th: { class?: string, colspan?: string };
       public td: { class?: string, colspan?: string };
