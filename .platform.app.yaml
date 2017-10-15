@@ -1,0 +1,12 @@
+name: node
+type: nodejs:6.9
+
+dependencies:
+  nodejs:
+    pm2: "^2.0.0"
+
+web:
+  commands:
+    start: "PM2_HOME=$PLATFORM_APP_DIR/run pm2 start --no-daemon npm -- start"
+
+
