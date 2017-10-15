@@ -3,7 +3,7 @@ import { createPuzzle } from './create-puzzle';
 import { l10n } from './l10n';
 import { Cell, CellType, ClueDirection, Message, Puzzle } from './types';
 
-import * as async from 'async';
+import * as _async from 'async';
 import * as bodyParser from 'body-parser';
 import * as browserify from 'browserify';
 import concat = require('concat-stream');
@@ -53,12 +53,12 @@ function serveJs(app: express.Express, url: string, tsFilename: string,
 function serveCss(app: express.Express, url: string, lessFilename: string,
                   callback: AsyncResultArrayCallback<string, string>) {
   console.log('Compiling ' + lessFilename);
-  async.waterfall([
-    async.apply(fs.readFile, lessFilename),
-    async.asyncify((data: Buffer) => data.toString()),
+  _async.waterfall([
+    _async.apply(fs.readFile, lessFilename),
+    _async.asyncify((data: Buffer) => data.toString()),
     // TODO: Figure out why this is not the same as just "less.render".
     (data: string, cb: (error: Less.RenderError, output: Less.RenderOutput) => void) => less.render(data, cb),
-    async.asyncify((data: Less.RenderOutput) => {
+    _async.asyncify((data: Less.RenderOutput) => {
       app.get(url, (req, res) => {
         res.set('Content-Type', 'text/css');
         res.send(data.css);
@@ -99,14 +99,14 @@ function addPuzzle(puzzle: Puzzle, callback: (id: ObjectID) => void) {
 // Main begins here.
 const app = express();
 
-async.parallel([
-  async.apply(serveJs, app, '/js/crossword.js', 'main_ui.ts'),
-  async.apply(serveJs, app, '/js/create.js', 'create_ui.ts'),
-  async.apply(serveJs, app, '/js/share.js', 'share_ui.ts'),
-  async.apply(serveCss, app, '/style/style.css', 'style.less'),
-  async.apply(async.waterfall, [
-    async.apply(MongoClient.connect, process.env.MONGODB),
-    async.asyncify((tempDb: Db) => { return db = tempDb; }),
+_async.parallel([
+  _async.apply(serveJs, app, '/js/crossword.js', 'main_ui.ts'),
+  _async.apply(serveJs, app, '/js/create.js', 'create_ui.ts'),
+  _async.apply(serveJs, app, '/js/share.js', 'share_ui.ts'),
+  _async.apply(serveCss, app, '/style/style.css', 'style.less'),
+  _async.apply(_async.waterfall, [
+    _async.apply(MongoClient.connect, process.env.MONGODB),
+    _async.asyncify((tempDb: Db) => { return db = tempDb; }),
     (unused: Db, cb: MongoCallback<any[]>) => db.collection('crosswords').find().toArray(cb),
   ]),
 ], (err, results) => {
