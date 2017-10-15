@@ -1,10 +1,6 @@
 name: node
 type: nodejs:6.9
 
-dependencies:
-  nodejs:
-    #pm2: "^2.0.0"
-
 web:
   commands:
     start: "ts-node -O '{\"noImplicitAny\":true,\"jsx\":\"react\",\"typeRoots\":[\"types\"],\"baseUrl\":\"types\"}' server.ts"
