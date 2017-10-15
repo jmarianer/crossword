@@ -9,4 +9,6 @@ web:
   commands:
     start: "PM2_HOME=$PLATFORM_APP_DIR/run pm2 start --no-daemon npm -- start"
 
+dist: 512
+
 
