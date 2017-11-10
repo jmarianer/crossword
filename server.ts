@@ -27,7 +27,7 @@ let db: Db;
 
 // Helpers for serving Typescript and Less as JS and CSS.
 function serveJs(app: express.Express, url: string, tsFilename: string,
-                 callback: AsyncResultArrayCallback<string, string>) {
+                 callback: async.AsyncResultArrayCallback<string, string>) {
   let errors = false;
   console.log('Compiling ' + tsFilename);
   browserify(tsFilename)
@@ -51,7 +51,7 @@ function serveJs(app: express.Express, url: string, tsFilename: string,
 }
 
 function serveCss(app: express.Express, url: string, lessFilename: string,
-                  callback: AsyncResultArrayCallback<string, string>) {
+                  callback: async.AsyncResultArrayCallback<string, string>) {
   console.log('Compiling ' + lessFilename);
   async.waterfall([
     async.apply(fs.readFile, lessFilename),
