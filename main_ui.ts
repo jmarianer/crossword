@@ -69,6 +69,12 @@ function sendSolution(position: Position, solution: string) {
 }
 
 $(() => {
+  $('.number').each((_, n) => {
+    let pos = $(n).parent().offset();
+    pos.top += 2;
+    pos.left += 2;
+    $(n).offset(pos);
+  });
   $('.empty').click((e) => {
     activate($(e.currentTarget));
   });
