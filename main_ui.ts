@@ -69,12 +69,21 @@ function sendSolution(position: Position, solution: string) {
 }
 
 $(() => {
+  let ltr = $('.crossword').css('direction') === 'ltr';
+
   $('.number').each((_, n) => {
-    let pos = $(n).parent().offset();
+    let num = $(n);
+    let block = num.parent();
+    let pos = block.offset();
     pos.top += 2;
-    pos.left += 2;
-    $(n).offset(pos);
+    if (ltr) {
+      pos.left += 2;
+    } else {
+      pos.left += block.outerWidth() - num.outerWidth() - 2;
+    }
+    num.offset(pos);
   });
+
   $('.empty').click((e) => {
     activate($(e.currentTarget));
   });
@@ -85,8 +94,6 @@ $(() => {
   });
 
   $('body').keydown((e) => {
-    let direction = $('.crossword').css('direction') === 'ltr' ? 1 : -1;
-
     let key = e.key;
     let position = getElementPosition($('.active'));
     if (key.length === 1) {
@@ -97,9 +104,9 @@ $(() => {
         move(position, 1, 0);
       }
     } else if (key === 'ArrowLeft') {
-      move(position, 0, -direction);
+      move(position, 0, ltr ? -1 : 1);
     } else if (key === 'ArrowRight') {
-      move(position, 0, direction);
+      move(position, 0, ltr ? 1 : -1);
     } else if (key === 'ArrowUp') {
       move(position, -1, 0);
     } else if (key === 'ArrowDown') {
