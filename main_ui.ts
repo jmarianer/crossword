@@ -75,6 +75,7 @@ $(() => {
     let num = $(n);
     let block = num.parent();
     let pos = block.offset();
+
     pos.top += 2;
     if (ltr) {
       pos.left += 2;
