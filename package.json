@@ -20,7 +20,7 @@
 		"@types/socket.io": "",
 		"@types/socket.io-client": "",
 		"array-flatten": "",
-    "async": "",
+		"async": "",
 		"body-parser": "",
 		"browserify": "",
 		"express": "^4.12.4",
@@ -46,7 +46,7 @@
 	],
 	"license": "",
 	"devDependencies": {
-	  "lesshint": "^2.4.0",
-	  "tslint": "^4.3.1"
+		"lesshint": "^2.4.0",
+		"tslint": "^4.3.1"
 	}
 }

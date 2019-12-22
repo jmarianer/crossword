@@ -25,8 +25,8 @@ declare global {
   }
 }
 
-// Wish I could say simply '...content: flatten.NestedArray<string>', but ts doesn't like that.
-export function createElement(name: string, props: any, ...content: Array<string|flatten.NestedArray<string>>) {
+// Wish I could say simply '...content: flatten.FlatArray<string>', but ts doesn't like that.
+export function createElement(name: string, props: any, ...content: Array<string|flatten.FlatArray<string>>) {
   if (name === 'br') {  // annoying special case hack :-(
     return '<br>';
   }
@@ -38,5 +38,5 @@ export function createElement(name: string, props: any, ...content: Array<string
       }
     }
   }
-  return `<${name}${propsString}>${flatten(content).join('')}</${name}>`;
+  return `<${name}${propsString}>${flatten.flatten(content).join('')}</${name}>`;
 }

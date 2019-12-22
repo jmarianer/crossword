@@ -91,7 +91,7 @@ function addPuzzle(puzzle: Puzzle, callback: (id: ObjectID) => void) {
     }
 
     let id = result.ops[0]._id;
-    puzzles[id] = puzzle;
+    puzzles[id.toHexString()] = puzzle;
     callback(id);
   });
 }
