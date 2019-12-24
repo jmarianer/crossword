@@ -106,8 +106,10 @@ async.parallel([
   async.apply(serveCss, app, '/style/style.css', 'style.less'),
   async.apply(async.waterfall, [
     async.apply(MongoClient.connect, process.env.MONGODB),
-    async.asyncify((tempDb: Db) => { return db = tempDb; }),
-    (unused: Db, cb: MongoCallback<any[]>) => db.collection('crosswords').find().toArray(cb),
+    async.asyncify((client: MongoClient) => { return db = client.db('crosswords'); }),
+    (unused: any, cb: MongoCallback<any[]>) => {
+      db.collection('crosswords').find().toArray(cb)
+    }
   ]),
 ], (err, results) => {
   if (err) {
