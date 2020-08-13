@@ -1,7 +1,7 @@
 version: '3'
 services:
   web:
-    image: gcr.io/prefab-conquest-186122/boobtree
+    image: gcr.io/prefab-conquest-186122/crosswords
     build: .
     ports:
       - "3000:3000"
