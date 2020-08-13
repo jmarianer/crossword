@@ -13,7 +13,6 @@ import * as less from 'less';
 import { Db, MongoCallback, MongoClient, ObjectID } from 'mongodb';
 import * as path from 'path';
 import * as io from 'socket.io';
-import * as tss from 'typescript-simple';
 import * as url from 'url';
 
 import puzzleTemplate = require('./templates/puzzle');
@@ -25,48 +24,10 @@ import cluesTemplate = require('./templates/clues');
 let puzzles: {[id: string]: Puzzle} = {};
 let db: Db;
 
-// Helpers for serving Typescript and Less as JS and CSS.
-function serveJs(app: express.Express, url: string, tsFilename: string,
-                 callback: async.AsyncResultArrayCallback<string, string>) {
-  let errors = false;
-  console.log('Compiling ' + tsFilename);
-  browserify(tsFilename)
-    .plugin('tsify', { noImplicitAny: true, jsx: 'react' })
-    .bundle()
-    .on('error', (error: Error) => {
-      console.error(error.toString());
-      errors = true;
-    })
-    .pipe(concat((buf: Buffer) => {
-      if (errors) {
-        callback('Error compiling ' + tsFilename, null);
-      }
-      console.log('Finished compiling ' + tsFilename);
-      app.get(url, (req, res) => {
-        res.set('Content-Type', 'text/javascript');
-        res.send(buf.toString());
-      });
-      callback(null, null);
-    }));
-}
-
-function serveCss(app: express.Express, url: string, lessFilename: string,
-                  callback: async.AsyncResultArrayCallback<string, string>) {
-  console.log('Compiling ' + lessFilename);
-  async.waterfall([
-    async.apply(fs.readFile, lessFilename),
-    async.asyncify((data: Buffer) => data.toString()),
-    // TODO: Figure out why this is not the same as just "less.render".
-    (data: string, cb: (error: Less.RenderError, output: Less.RenderOutput) => void) => less.render(data, cb),
-    async.asyncify((data: Less.RenderOutput) => {
-      app.get(url, (req, res) => {
-        res.set('Content-Type', 'text/css');
-        res.send(data.css);
-      });
-      console.log('Finished compiling ' + lessFilename);
-      callback(null, null);
-    }),
-  ]);
+function serveStatic(app: express.Express, url: string, filename: string) {
+  app.get(url, (req, res) => {
+    res.sendFile(path.resolve(__dirname, filename));
+  });
 }
 
 // Helpers for creating and cloning puzzles.
@@ -98,29 +59,24 @@ function addPuzzle(puzzle: Puzzle, callback: (id: ObjectID) => void) {
 
 // Main begins here.
 const app = express();
+serveStatic(app, '/js/crossword.js', 'main_ui.js');
+serveStatic(app, '/js/create.js', 'create_ui.js');
+serveStatic(app, '/js/share.js', 'share_ui.js');
+serveStatic(app, '/style/style.css', 'style.css');
 
-async.parallel([
-  async.apply(serveJs, app, '/js/crossword.js', 'main_ui.ts'),
-  async.apply(serveJs, app, '/js/create.js', 'create_ui.ts'),
-  async.apply(serveJs, app, '/js/share.js', 'share_ui.ts'),
-  async.apply(serveCss, app, '/style/style.css', 'style.less'),
-  async.apply(async.waterfall, [
-    async.apply(MongoClient.connect, process.env.MONGODB),
-    async.asyncify((client: MongoClient) => { return db = client.db('crosswords'); }),
-    (unused: any, cb: MongoCallback<any[]>) => {
-      db.collection('crosswords').find().toArray(cb)
-    }
-  ]),
-], (err, results) => {
+MongoClient.connect(process.env.MONGODB, (err, client) => {
   if (err) {
     throw err;
   }
 
   app.use(bodyParser.urlencoded({ extended: true }));
 
-  for (let i of results[4]) {
-    puzzles[i._id] = i.puzzle;
-  }
+  db = client.db('crosswords');
+  db.collection('crosswords').find().toArray((_, db_puzzles) => {
+    for (let i of db_puzzles) {
+      puzzles[i._id] = i.puzzle;
+    }
+  });
 
   app.get('/puzzle/:id', (request, response) => {
     let puzzid = request.params.id;

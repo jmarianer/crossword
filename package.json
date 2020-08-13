@@ -3,20 +3,21 @@
 	"version": "0.0.1",
 	"description": "A collaborative crossword-filling app",
 	"scripts": {
-		"start": "ts-node -O '{\"noImplicitAny\":true,\"jsx\":\"react\",\"typeRoots\":[\"types\"],\"baseUrl\":\"types\"}' server.ts"
+		"tsc": "tsc",
+		"lessc": "lessc style.less style.css",
+		"browserify": "browserify -p tsify"
 	},
 	"dependencies": {
 		"@types/async": "",
 		"@types/body-parser": "",
 		"@types/browserify": "",
 		"@types/concat-stream": "",
-		"@types/es6-promise": "",
 		"@types/express": "",
 		"@types/jquery": "",
 		"@types/jqueryui": "",
 		"@types/less": "",
 		"@types/mongodb": "",
-		"@types/node": "",
+		"@types/node": "^14.0.27",
 		"@types/socket.io": "",
 		"@types/socket.io-client": "",
 		"array-flatten": "",
@@ -31,8 +32,7 @@
 		"socket.io": "",
 		"ts-node": "",
 		"tsify": "",
-		"typescript": "rc",
-		"typescript-simple": ""
+		"typescript": "^3.9.7"
 	},
 	"engines": {
 		"node": "10.16.0"
